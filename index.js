@@ -1,5 +1,5 @@
-const Discord = require("discord.js");
 require('dotenv').config();
+const Discord = require("discord.js");
 const bot = new Discord.Client();
 const fs = require('fs');
 bot.login(process.env.DISCORD_KEY);
@@ -20,10 +20,10 @@ bot.on('message', (msg) => {        //Help
 });
 bot.on('message', (msg) => {        //add Raffle links      
     if (msg.content.substr(0, 9) === "!addlinks") {
-        let data = JSON.stringify(a);
         const x = msg.content.substr(10, msg.length);
         console.log(a.link);
         a.link.push(x)
+        let data = JSON.stringify(a);
         fs.writeFileSync('JsonList.json', data);
         msg.reply("Link aggiunto con successo");
     }
