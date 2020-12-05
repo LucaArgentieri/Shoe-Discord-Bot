@@ -1,0 +1,1 @@
+{"link":["https://stackoverflow.com/questions/59995627/javascript-saving-a-string-to-txt-and-recognizing-line-breaks"]}{"link":["https://stackoverflow.com/questions/59995627/javascript-saving-a-string-to-txt-and-recognizing-line-breaks","https://www.youtube.com/watch?v=tyU_n_5tQww&ab_channel=SalmoOfficialVEVO"]}
