@@ -1,7 +1,8 @@
 const Discord = require("discord.js");
+require('dotenv').config();
 const bot = new Discord.Client();
 const fs = require('fs');
-bot.login('Nzg0NzgzNTc3NzE1NDQxNjY1.X8uUqQ.UMpJH-FoWnm8hWDgE7BzmTcpLN0');
+bot.login(process.env.DISCORD_KEY);
 //fz link
 const a = {
     link:[]
