@@ -1,0 +1,7 @@
+bot.on('message', (msg) => {        //Elenco lista Raffle
+    if (msg.content == '!Raffle') {
+        let rawdata = fs.readFileSync('JsonList.json');
+        let data = JSON.parse(rawdata);
+        msg.reply(data[0]);
+    }
+});
