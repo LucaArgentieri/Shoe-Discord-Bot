@@ -12,7 +12,7 @@ bot.on('message', (msg) => {        //Presentati
 });
 bot.on('message', (msg) => {        //Help
     if (msg.content.toLowerCase() == '!help') {
-        msg.reply('Ciao i comandi disponibili per questo bot sono: \n !presentati - non lo sappiamo nemmeno noi, provalo.');
+        msg.reply('Ciao i comandi disponibili per questo bot sono:\n'+ '```!presentati - non lo sappiamo nemmeno noi, provalo.\n!addlinks - per aggiungere i link per le raffle.\n!raffle - per elencare tutti i siti per iscriversi alle raffle in caso ti fossi perso qualche link.```');
     }
 });
 bot.on('message', (msg) => {        //add Raffle links      
