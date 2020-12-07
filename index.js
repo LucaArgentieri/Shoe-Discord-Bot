@@ -1,4 +1,5 @@
 require('dotenv').config();
+const { Console } = require('console');
 const Discord = require("discord.js");
 const bot = new Discord.Client();
 var fs = require('fs');
@@ -16,19 +17,26 @@ bot.on('message', (msg) => {        //Help
 });
 bot.on('message', (msg) => {        //add Raffle links      
     if (msg.content.substr(0, 9).toLowerCase() === "!addlinks") {
-        var arraylist = fs.readFileSync('Links.txt', 'utf8').split('\n');
-        console.log(arraylist.length);
-        if (arraylist.length === 1) {
+        var arraylist = fs.readFileSync('Links.txt', 'utf8');
+        if (arraylist.length === 0) {
             const x = msg.content.substr(10, msg.length);
-            fs.writeFile('Links.txt', x + "\r\n", { flag: 'r+' }, err => { });
-            msg.reply("done")
+            if (x.substr(0, 5) == "https") {
+                fs.writeFile('Links.txt', "<" + x + ">", { flag: 'r+' }, err => { });
+                msg.reply("done")
+            } else {
+                msg.reply("MA BRO, NOOO MA CHE CAZZO FAI, VOGLIO SOLO I LINK")
+            }
         }
-        else{
+        else {
             const x = msg.content.substr(10, msg.length);
-            let data = arraylist + x;
-            fs.writeFile('Links.txt', data, { flag: 'r+' }, err => { });
-            msg.reply("done")
-            
+            if (x.substr(0, 5) == "https") {
+                let data = arraylist + ("\n") + "<" + x + ">";
+                fs.writeFile('Links.txt', data, { flag: 'r+' }, err => { });
+                msg.reply("done")
+            } else {
+                msg.reply("MA BRO, NOOO MA CHE CAZZO FAI, VOGLIO SOLO I LINK")
+            }
+
         }
 
     }
@@ -39,8 +47,8 @@ bot.on('message', (msg) => {        //add Raffle links
 
 bot.on('message', (msg) => {        //Elenco lista Raffle
     if (msg.content.toLowerCase() == '!raffle') {
-        var arraylist = fs.readFileSync('Links.txt', 'utf8').split('\n');
-        msg.reply(("Ecco i link per le raffle:\r\n")+arraylist);
+        var arraylist = fs.readFileSync('Links.txt', 'utf8')
+        msg.reply(("Ecco i link per le raffle:\r\n") + arraylist);
     }
 
 });
@@ -49,9 +57,9 @@ bot.on('message', (message) => {  //chat
 });
 
 bot.on('message', (msg) => {        //Svuota lista
-    
+
     if (msg.content.toLowerCase() == '!clearlist') {
-        
+
         msg.reply("sicuro di voler svuotare la lista? Ormai ho fatto xd");
     }
 });
