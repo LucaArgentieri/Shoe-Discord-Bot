@@ -60,10 +60,16 @@ bot.on('message', (msg) => {         //prezzo retail
         const x = msg.content.substr(7, msg.length);
         console.log(x)
         sneaks.getProducts(x, function (err, products) {
+            const embed = new Discord.MessageEmbed()
+
             let data = products
             data.slice(0,4).forEach(function(retail,i){
-            console.log(data);
-            msg.reply(`Il retail di queste paia ${retail.shoeName} è di: ${retail.retailPrice}$`+"\n" + `${retail.thumbnail}`);    
+                let info = embed.setImage(`${retail.thumbnail}`)
+                .setTitle(`${retail.shoeName}`)
+                .setDescription(`Prezzo retail: ${retail.retailPrice}$`+"\n"+`Data Release: ${retail.releaseDate}`);
+                console.log(data);
+                //  msg.reply(`Il retail di queste paia ${retail.shoeName} è di: ${retail.retailPrice}$`);    
+                 msg.channel.send(info)
             });
         })
     }
@@ -71,8 +77,8 @@ bot.on('message', (msg) => {         //prezzo retail
 
 });
 bot.on('message', (msg) => {         //prezzo resell
-    if (msg.content.substr(0, 7).toLowerCase() === "!resell") {
-        const x = msg.content.substr(7, msg.length);
+    if (msg.content.substr(0, 5).toLowerCase() === "!info") {   //info
+        const x = msg.content.substr(5, msg.length);
         console.log(x)
         sneaks.getProducts(x, function (err, products) {
 
@@ -83,9 +89,19 @@ bot.on('message', (msg) => {         //prezzo resell
             products.slice(0, 4).forEach(function (resell) {
                 console.log(resell);
 
-                let info = embed.setImage(`${resell.thumbnail}`).setDescription(`${resell.shoeName}`)
-
-                msg.reply(`Resell delle paia ${resell.shoeName} uscite a retail a ` + `${resell.retailPrice}$` + ` è di; ` + "\n" + `StockX:  ${resell.lowestResellPrice.stockX}$` + "\n" + `FlightClub:  ${resell.lowestResellPrice.flightClub}$` + "\n" + `Goat:  ${resell.lowestResellPrice.goat}$` + "\n" + `StadiumGoods:  ${resell.lowestResellPrice.stadiumGoods}$`)
+                let info = embed
+                .setImage(`${resell.thumbnail}`)
+                .setColor('#0099ff')     //colore barra          
+                .setTitle(`${resell.shoeName}`)
+                .addFields(
+                    { name: 'Prezzo retail:', value: `${resell.retailPrice}$` },
+                    { name: 'Prezzi di resell', value: 'del paio piu bassi avvenuti nei seguenti siti' },
+                    { name: 'StockX:', value: `${resell.lowestResellPrice.stockX}$`, inline: true },
+                    { name: 'FlightClub:', value: `${resell.lowestResellPrice.flightClub}$`, inline: true },
+                    { name: 'Goat:', value: `${resell.lowestResellPrice.goat}$`, inline: true },
+                    { name: 'StadiumGoods:', value: `${resell.lowestResellPrice.stadiumGoods}$`, inline: true },
+                )
+                .setDescription(`Data Release: ${resell.releaseDate}`);
 
                 msg.channel.send(info)
                 
