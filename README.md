@@ -9,3 +9,4 @@ Da fare :
 - Ricerca per codice
 - Ricerca per numero
 - Controllo undefined scambio con N/A
+https://anidiots.guide/first-bot/using-embeds-in-messages
