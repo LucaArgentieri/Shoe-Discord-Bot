@@ -60,9 +60,11 @@ bot.on('message', (msg) => {         //prezzo retail
         const x = msg.content.substr(7, msg.length);
         console.log(x)
         sneaks.getProducts(x, function (err, products) {
-            let data = products;
-            console.log(data[0]);
-            msg.reply(`Il retail di queste paia è di: ${data[0].retailPrice}$`);
+            let data = products
+            data.slice(0,4).forEach(function(retail,i){
+            console.log(data);
+            msg.reply(`Il retail di queste paia ${retail.shoeName} è di: ${retail.retailPrice}$`+"\n" + `${retail.thumbnail}`);    
+            });
         })
     }
 
