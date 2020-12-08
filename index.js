@@ -16,7 +16,7 @@ bot.on('message', (msg) => {        //Presentati
 });
 bot.on('message', (msg) => {        //Help
     if (msg.content.toLowerCase() == '!help') {
-        msg.reply('Ciao i comandi disponibili per questo bot sono:\n'+ '```!presentati - non lo sappiamo nemmeno noi, provalo.\n!addlinks - per aggiungere i link per le raffle.\n!raffle - per elencare tutti i siti per iscriversi alle raffle in caso ti fossi perso qualche link.```');
+        msg.reply('Ciao i comandi disponibili per questo bot sono:\n' + '```!presentati - non lo sappiamo nemmeno noi, provalo.\n!addlinks - per aggiungere i link per le raffle.\n!raffle - per elencare tutti i siti per iscriversi alle raffle in caso ti fossi perso qualche link.```');
     }
 });
 bot.on('message', (msg) => {        //add Raffle links      
@@ -56,11 +56,11 @@ bot.on('message', (message) => {  //chat
     console.log(`[${message.author.tag}]: ${message.content}`)
 });
 bot.on('message', (msg) => {         //prezzo retail
-    if (msg.content.substr(0,7 ).toLowerCase() === "!retail") {
+    if (msg.content.substr(0, 7).toLowerCase() === "!retail") {
         const x = msg.content.substr(7, msg.length);
         console.log(x)
-        sneaks.getProducts(x, function(err, products){
-            let data = products; 
+        sneaks.getProducts(x, function (err, products) {
+            let data = products;
             console.log(data[0]);
             msg.reply(`Il retail di queste paia è di: ${data[0].retailPrice}$`);
         })
@@ -69,15 +69,15 @@ bot.on('message', (msg) => {         //prezzo retail
 
 });
 bot.on('message', (msg) => {         //prezzo resell
-    if (msg.content.substr(0,7 ).toLowerCase() === "!resell") {
+    if (msg.content.substr(0, 7).toLowerCase() === "!resell") {
         const x = msg.content.substr(7, msg.length);
         console.log(x)
-        sneaks.getProducts(x, function(err, products){
+        sneaks.getProducts(x, function (err, products) {
             // console.log(data[0]);
             // msg.reply(`Il resell delle paia ${data[0].shoeName} è di:`+"```"+`${data[0].lowestResellPrice}(valori in Dollari)`+ "```"+`${data[0].thumbnail}`);
-            products.slice(0,4).forEach(function(resell,i){
+            products.slice(0, 4).forEach(function (resell, i) {
                 console.log(resell);
-            msg.reply(`Resell delle paia ${resell.shoeName} uscite a retail a `+`${resell.retailPrice}$`+ ` è di; `+"\n"+ `StockX:  ${resell.lowestResellPrice.stockX}$`+"\n"+ `FlightClub:  ${resell.lowestResellPrice.flightClub}$`+"\n"+ `Goat:  ${resell.lowestResellPrice.goat}$`+"\n"+`StadiumGoods:  ${resell.lowestResellPrice.stadiumGoods}$`+"\n"+`${resell.thumbnail}`)
+                msg.reply(`Resell delle paia ${resell.shoeName} uscite a retail a ` + `${resell.retailPrice}$` + ` è di; ` + "\n" + `StockX:  ${resell.lowestResellPrice.stockX}$` + "\n" + `FlightClub:  ${resell.lowestResellPrice.flightClub}$` + "\n" + `Goat:  ${resell.lowestResellPrice.goat}$` + "\n" + `StadiumGoods:  ${resell.lowestResellPrice.stadiumGoods}$` + "\n" + `${resell.thumbnail}`)
             })
         })
     }
