@@ -1,7 +1,6 @@
 {
   "name": "discorddroptrack_bot",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -13,6 +12,17 @@
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
     "node-fetch": "^2.6.1",
-    "nodemon": "^2.0.6"
-  }
+    "nodemon": "^2.0.6",
+    "sneaks-api": "^1.1.1"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LucaArgentieri/DiscordBot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LucaArgentieri/DiscordBot/issues"
+  },
+  "homepage": "https://github.com/LucaArgentieri/DiscordBot#readme",
+  "description": ""
 }
