@@ -73,14 +73,29 @@ bot.on('message', (msg) => {         //prezzo resell
         const x = msg.content.substr(7, msg.length);
         console.log(x)
         sneaks.getProducts(x, function (err, products) {
-            // console.log(data[0]);
-            // msg.reply(`Il resell delle paia ${data[0].shoeName} è di:`+"```"+`${data[0].lowestResellPrice}(valori in Dollari)`+ "```"+`${data[0].thumbnail}`);
-            products.slice(0, 4).forEach(function (resell, i) {
+
+            
+            const embed = new Discord.MessageEmbed()
+            
+
+            products.slice(0, 4).forEach(function (resell) {
                 console.log(resell);
-                msg.reply(`Resell delle paia ${resell.shoeName} uscite a retail a ` + `${resell.retailPrice}$` + ` è di; ` + "\n" + `StockX:  ${resell.lowestResellPrice.stockX}$` + "\n" + `FlightClub:  ${resell.lowestResellPrice.flightClub}$` + "\n" + `Goat:  ${resell.lowestResellPrice.goat}$` + "\n" + `StadiumGoods:  ${resell.lowestResellPrice.stadiumGoods}$` + "\n" + `${resell.thumbnail}`)
+
+                let info = embed.setImage(`${resell.thumbnail}`).setDescription(`${resell.shoeName}`)
+
+                msg.reply(`Resell delle paia ${resell.shoeName} uscite a retail a ` + `${resell.retailPrice}$` + ` è di; ` + "\n" + `StockX:  ${resell.lowestResellPrice.stockX}$` + "\n" + `FlightClub:  ${resell.lowestResellPrice.flightClub}$` + "\n" + `Goat:  ${resell.lowestResellPrice.goat}$` + "\n" + `StadiumGoods:  ${resell.lowestResellPrice.stadiumGoods}$`)
+
+                msg.channel.send(info)
+                
+                
             })
+
+           
+
         })
     }
 
 
 });
+
+
