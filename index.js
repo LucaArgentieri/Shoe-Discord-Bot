@@ -63,57 +63,80 @@ bot.on('message', (msg) => {         //prezzo retail
             const embed = new Discord.MessageEmbed()
 
             let data = products
-            data.slice(0,4).forEach(function(retail,i){
+            data.slice(0, 4).forEach(function (retail, i) {
                 let info = embed.setImage(`${retail.thumbnail}`)
-                .setTitle(`${retail.shoeName}`)
-                .setDescription(`Prezzo retail: ${retail.retailPrice}$`+"\n"+`Data Release: ${retail.releaseDate}`);
+                    .setTitle(`${retail.shoeName}`)
+                    .setDescription(`Prezzo retail: ${retail.retailPrice}$` + "\n" + `Data Release: ${retail.releaseDate}`);
                 console.log(data);
                 //  msg.reply(`Il retail di queste paia ${retail.shoeName} è di: ${retail.retailPrice}$`);    
-                 msg.channel.send(info)
+                msg.channel.send(info)
             });
         })
     }
 
 
 });
-bot.on('message', (msg) => {         //prezzo resell
+bot.on('message', (msg) => {         //prezzo info
     if (msg.content.substr(0, 5).toLowerCase() === "!info") {   //info
         const x = msg.content.substr(5, msg.length);
         console.log(x)
         sneaks.getProducts(x, function (err, products) {
 
-            
+
             const embed = new Discord.MessageEmbed()
-            
+
 
             products.slice(0, 4).forEach(function (resell) {
                 console.log(resell);
-
                 let info = embed
-                .setImage(`${resell.thumbnail}`)
-                .setColor('#0099ff')     //colore barra          
-                .setTitle(`${resell.shoeName}`)
-                .addFields(
-                    { name: 'Prezzo retail:', value: `${resell.retailPrice}$` },
-                    { name: 'Prezzi di resell', value: 'del paio piu bassi avvenuti nei seguenti siti' },
-                    { name: 'StockX:', value: `${resell.lowestResellPrice.stockX}$`, inline: true },
-                    { name: 'FlightClub:', value: `${resell.lowestResellPrice.flightClub}$`, inline: true },
-                    { name: 'Goat:', value: `${resell.lowestResellPrice.goat}$`, inline: true },
-                    { name: 'StadiumGoods:', value: `${resell.lowestResellPrice.stadiumGoods}$`, inline: true },
-                )
-                .setDescription(`Data Release: ${resell.releaseDate}`);
+                    .setImage(`${resell.thumbnail}`)
+                    .setColor('#0099ff')     //colore barra          
+                    .setTitle(`${resell.shoeName}`)
+                    .addFields(
+                        { name: 'Prezzo retail:', value: `${resell.retailPrice}$` },
+                        { name: 'Prezzi di resell', value: 'del paio piu bassi avvenuti nei seguenti siti' },
+                        { name: 'StockX:', value: `${resell.lowestResellPrice.stockX}$`, inline: true },
+                        { name: 'FlightClub:', value: `${resell.lowestResellPrice.flightClub}$`, inline: true },
+                        { name: 'Goat:', value: `${resell.lowestResellPrice.goat}$`, inline: true },
+                        { name: 'StadiumGoods:', value: `${resell.lowestResellPrice.stadiumGoods}$`, inline: true },
+                    )
+                    .setDescription(`Data Release: ${resell.releaseDate}`);
 
                 msg.channel.send(info)
-                
-                
+                info.fields = [];
             })
-
-           
-
         })
     }
-
-
 });
+// bot.on('message', (msg) => {         //prossime release
+//     if (msg.content.toLowerCase() === "!newrelease") {   //info
+//         var oggi = new Date()
+//         var giorno= oggi.getFullYear()+'-'+(oggi.getMonth()+1)+'-'+("0"+ oggi.getDate()).slice(-2);
+//         console.log(giorno)
+//         sneaks.getProducts( function (err, products) {
+
+//             const embed = new Discord.MessageEmbed()
 
 
+//             products.forEach(function (prossimo) {
+//                 console.log(resell);
+//                 let info = embed
+//                     .setImage(`${resell.thumbnail}`)
+//                     .setColor('#0099ff')     //colore barra          
+//                     .setTitle(`${resell.shoeName}`)
+//                     .addFields(
+//                         { name: 'Prezzo retail:', value: `${resell.retailPrice}$` },
+//                         { name: 'Prezzi di resell', value: 'del paio piu bassi avvenuti nei seguenti siti' },
+//                         { name: 'StockX:', value: `${resell.lowestResellPrice.stockX}$`, inline: true },
+//                         { name: 'FlightClub:', value: `${resell.lowestResellPrice.flightClub}$`, inline: true },
+//                         { name: 'Goat:', value: `${resell.lowestResellPrice.goat}$`, inline: true },
+//                         { name: 'StadiumGoods:', value: `${resell.lowestResellPrice.stadiumGoods}$`, inline: true },
+//                     )
+//                     .setDescription(`Data Release: ${resell.releaseDate}`);
+
+//                 msg.channel.send(info)
+//                 info.fields = [];
+//             })
+//         })
+//     }
+// });
