@@ -1,4 +1,5 @@
 require('dotenv').config();
+var moment = require('moment');
 const SneaksAPI = require('sneaks-api');
 const sneaks = new SneaksAPI();
 const { Console } = require('console');
@@ -20,21 +21,21 @@ bot.on('message', (msg) => {        //Help
     }
 });
 bot.on('message', (msg) => {        //add Raffle links      
-    if (msg.content.substr(0, 9).toLowerCase() === "!addlinks") {
+    if (msg.content.substr(0, 10).toLowerCase() === "!addraffle") {
         var arraylist = fs.readFileSync('Links.txt', 'utf8');
         if (arraylist.length === 0) {
-            const x = msg.content.substr(10, msg.length);
-            if (x.substr(0, 5) == "https") {
-                fs.writeFile('Links.txt', "<" + x + ">", { flag: 'r+' }, err => { });
+            var linkRicevuto = msg.content.substr(11, msg.length);
+            if (linkRicevuto.substr(0, 5) == "https") {
+                fs.writeFile('Links.txt', "<" + linkRicevuto + ">", { flag: 'r+' }, err => { });
                 msg.reply("done")
             } else {
                 msg.reply("MA BRO, NOOO MA CHE CAZZO FAI, VOGLIO SOLO I LINK")
             }
         }
         else {
-            const x = msg.content.substr(10, msg.length);
-            if (x.substr(0, 5) == "https") {
-                let data = arraylist + ("\n") + "<" + x + ">";
+            const linkRicevuto = msg.content.substr(11, msg.length);
+            if (linkRicevuto.substr(0, 5) == "https") {
+                let data = arraylist + ("\n") + "<" + linkRicevuto + ">";
                 fs.writeFile('Links.txt', data, { flag: 'r+' }, err => { });
                 msg.reply("done")
             } else {
@@ -45,37 +46,58 @@ bot.on('message', (msg) => {        //add Raffle links
 
     }
 });
+
 bot.on('message', (msg) => {        //Elenco lista Raffle
-    if (msg.content.toLowerCase() == '!raffle') {
-        var arraylist = fs.readFileSync('Links.txt', 'utf8')
-        msg.reply(("Ecco i link per le raffle:\r\n") + arraylist);
+    if (msg.content.toLowerCase() == '!rr') {
+        let linkRicevuto = "";
+        fs.writeFile('Links.txt', linkRicevuto, { flag: 'w' }, err => { });
+
+        msg.reply(`Lista pulita`);
     }
 
 });
+
+
+bot.on('message', (msg) => {        //Elenco lista Raffle
+    if (msg.content.toLowerCase() == '!raffle') {
+        var arraylist = fs.readFileSync('Links.txt', 'utf8')
+        console.log(arraylist)
+        msg.reply(`Ecco i link per le raffle:\r\n` + `${arraylist}`);
+    }
+
+});
+
+
 bot.on('message', (message) => {  //chat
     console.log(`[${message.author.tag}]: ${message.content}`)
 });
+
+
 bot.on('message', (msg) => {         //prezzo retail
     if (msg.content.substr(0, 7).toLowerCase() === "!retail") {
         const x = msg.content.substr(7, msg.length);
         console.log(x)
+
+
         sneaks.getProducts(x, function (err, products) {
+
+
             const embed = new Discord.MessageEmbed()
 
             let data = products
             data.slice(0, 4).forEach(function (retail, i) {
+
                 let info = embed.setImage(`${retail.thumbnail}`)
                     .setTitle(`${retail.shoeName}`)
-                    .setDescription(`Prezzo retail: ${retail.retailPrice}$` + "\n" + `Data Release: ${retail.releaseDate}`);
+                    .setDescription(`Prezzo retail: ${retail.retailPrice}$` + "\n" + `Data Release: ${moment(retail.releaseDate).format('LL')}`);
                 console.log(data);
-                //  msg.reply(`Il retail di queste paia ${retail.shoeName} è di: ${retail.retailPrice}$`);    
                 msg.channel.send(info)
             });
         })
     }
-
-
 });
+
+
 bot.on('message', (msg) => {         //prezzo info
     if (msg.content.substr(0, 5).toLowerCase() === "!info") {   //info
         const x = msg.content.substr(5, msg.length);
@@ -100,7 +122,7 @@ bot.on('message', (msg) => {         //prezzo info
                         { name: 'Goat:', value: `${resell.lowestResellPrice.goat}$`, inline: true },
                         { name: 'StadiumGoods:', value: `${resell.lowestResellPrice.stadiumGoods}$`, inline: true },
                     )
-                    .setDescription(`Data Release: ${resell.releaseDate}`);
+                    .setDescription(`Data Release: ${moment(resell.releaseDate).format('LL')}`);
 
                 msg.channel.send(info)
                 info.fields = [];
@@ -108,6 +130,9 @@ bot.on('message', (msg) => {         //prezzo info
         })
     }
 });
+
+
+
 // bot.on('message', (msg) => {         //prossime release
 //     if (msg.content.toLowerCase() === "!newrelease") {   //info
 //         var oggi = new Date()
@@ -140,3 +165,5 @@ bot.on('message', (msg) => {         //prezzo info
 //         })
 //     }
 // });
+
+

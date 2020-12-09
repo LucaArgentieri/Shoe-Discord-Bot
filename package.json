@@ -11,6 +11,7 @@
   "dependencies": {
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
+    "moment": "^2.29.1",
     "node-fetch": "^2.6.1",
     "nodemon": "^2.0.6",
     "sneaks-api": "^1.1.1"
