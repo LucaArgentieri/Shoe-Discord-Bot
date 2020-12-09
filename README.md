@@ -10,7 +10,6 @@ TO DO :
 - Controllo undefined scambio con N/A
 - Completamento lista !help
 - elenco dei nuovi annunci
-- Formattazione data
 - Stile alla card (più avanti)
 - Il comando deve funzionare in dm
 https://anidiots.guide/first-bot/using-embeds-in-messages
