@@ -2,6 +2,7 @@ require('dotenv').config();
 var moment = require('moment');
 const SneaksAPI = require('sneaks-api');
 const sneaks = new SneaksAPI();
+require('events').EventEmitter.prototype._maxListeners = 100;
 const { Console } = require('console');
 const Discord = require("discord.js");
 const bot = new Discord.Client();
@@ -62,7 +63,10 @@ bot.on('message', (msg) => {        //Elenco lista Raffle
     if (msg.content.toLowerCase() == '!raffle') {
         var arraylist = fs.readFileSync('Links.txt', 'utf8')
         console.log(arraylist)
-        msg.reply(`Ecco i link per le raffle:\r\n` + `${arraylist}`);
+        if (arraylist.length == 0) {
+            msg.reply('\n Mi spiace, al momento non ci sono raffle disponibili!')
+        } else
+            msg.reply(`Ecco i link per le raffle:\r\n` + `${arraylist}`);
     }
 
 });
@@ -134,13 +138,20 @@ bot.on('message', (msg) => {         //prezzo info
 
 
 bot.on('message', (msg) => {         //prossime release
-    if (msg.content.toLowerCase() === "!newrelease") {   //info
-        var oggi = new Date()
-        var giorno= oggi.getFullYear()+'-'+(oggi.getMonth()+1)+'-'+("0"+ oggi.getDate()).slice(-2);
-        console.log(giorno)
-        sneaks.getProducts(giorno,function (err, products) {
+    if (msg.content.toLowerCase() === "!newrelease") {
 
-            const embed = new Discord.MessageEmbed()
+        const embed = new Discord.MessageEmbed()
+
+
+        let info = embed
+            .setImage('https://i.pinimg.com/originals/65/ba/48/65ba488626025cff82f091336fbf94bb.gif')
+            .setTitle('Attendere..')
+        var oggi = new Date()
+        var giorno = oggi.getFullYear() + '-' + (oggi.getMonth() + 1) + '-' + ("0" + oggi.getDate()).slice(-2);
+        console.log(giorno)
+        sneaks.getProducts(giorno, function (err, products) {
+
+
 
 
             products.forEach(function (prossimo) {
@@ -166,39 +177,85 @@ bot.on('message', (msg) => {         //prossime release
 });
 
 bot.on('message', (msg) => {         //release del mese
-    if (msg.content.toLowerCase() === "!dropmese") {   //info
+    if (msg.content.toLowerCase() === "!dropmese") {
         var oggi = new Date()
-        var qstmese = oggi.getMonth()+1;
+        var qstmese = oggi.getMonth() + 1;
         var qstanno = oggi.getFullYear();
-        sneaks.getProducts(function (err, products) {
+        var x = qstanno + '-' + qstmese;
+        console.log(qstanno)
+        sneaks.getProducts(x, function (err, products) {
 
             const embed = new Discord.MessageEmbed()
 
             products.forEach(function (prossimo) {
-                let m = prossimo.releaseDate.substr(-5,2);
-                let y = prossimo.releaseDate.substr(0,4);
-                
-                if(m===qstmese && y===qstanno){
-                let info = embed
-                    .setImage(`${prossimo.thumbnail}`)
-                    .setColor('#008000')     //colore barra          
-                    .setTitle(`${prossimo.shoeName}`)
-                    .addFields(
-                        { name: 'Prezzo retail:', value: `${prossimo.retailPrice}$` },
-                        { name: 'Prezzi di resell', value: 'del paio piu bassi avvenuti nei seguenti siti' },
-                        { name: 'StockX:', value: `${prossimo.lowestResellPrice.stockX}$`, inline: true },
-                        { name: 'FlightClub:', value: `${prossimo.lowestResellPrice.flightClub}$`, inline: true },
-                        { name: 'Goat:', value: `${prossimo.lowestResellPrice.goat}$`, inline: true },
-                        { name: 'StadiumGoods:', value: `${prossimo.lowestResellPrice.stadiumGoods}$`, inline: true },
-                    )
-                    .setDescription(`Data Release: ${prossimo.releaseDate}`);
+                let m = prossimo.releaseDate.substr(-5, 2);
+                let y = prossimo.releaseDate.substr(0, 4);
 
-                msg.channel.send(info)
-                info.fields = [];
-                    }
+                if (m == qstmese) {
+                    let info = embed
+                        .setImage(`${prossimo.thumbnail}`)
+                        .setColor('#008000')     //colore barra          
+                        .setTitle(`${prossimo.shoeName}`)
+                        .addFields(
+                            { name: 'Prezzo retail:', value: `${prossimo.retailPrice}$` },
+                            { name: 'Prezzi di resell', value: 'del paio piu bassi avvenuti nei seguenti siti' },
+                            { name: 'StockX:', value: `${prossimo.lowestResellPrice.stockX}$`, inline: true },
+                            { name: 'FlightClub:', value: `${prossimo.lowestResellPrice.flightClub}$`, inline: true },
+                            { name: 'Goat:', value: `${prossimo.lowestResellPrice.goat}$`, inline: true },
+                            { name: 'StadiumGoods:', value: `${prossimo.lowestResellPrice.stadiumGoods}$`, inline: true },
+                        )
+                        .setDescription(`Data Release: ${prossimo.releaseDate}`);
+
+                    msg.channel.send(info)
+                    info.fields = [];
+                }
             })
         })
     }
 });
 
+bot.on('message', (msg) => {        //Scarpe stonks ultimi 3 mesi
+    if (msg.content.toLowerCase() == '!stonks') {
+        const embed = new Discord.MessageEmbed()
+        let info = embed
+            .setImage('https://i.pinimg.com/originals/65/ba/48/65ba488626025cff82f091336fbf94bb.gif')
+            .setTitle('Attendere..')
+
+        msg.channel.send(info);
+
+        var oggi = new Date()
+        var qstg = ("0" + oggi.getDate()).slice(-2)
+        var qstmese = oggi.getMonth() + 1;
+        var qstanno = oggi.getFullYear();
+        var giorno = oggi.getFullYear() + '-' + (oggi.getMonth() + 1) + '-' + ("0" + oggi.getDate()).slice(-2);
+        sneaks.getMostPopular(function (err, products) {
+            msg.reply('Ecco a te le scarpe più popolari degli ultimi 3 mesi')
+            products.forEach(function (stonks) {
+                let d = stonks.releaseDate.substr(-2, 7);
+                let m = stonks.releaseDate.substr(-5, 2);
+                let y = stonks.releaseDate.substr(0, 4);
+                if (y >= qstanno && m == qstmese || y >= qstanno && m == qstmese - 1 || y >= qstanno && m == qstmese - 2) {
+                    let info = embed
+                        .setImage(`${stonks.thumbnail}`)
+                        .setColor('#f0f8ff')     //colore barra          
+                        .setTitle(`${stonks.shoeName}`)
+                        .addFields(
+                            { name: 'Prezzo retail:', value: `${stonks.retailPrice}$` },
+                            { name: 'Prezzi di resell', value: 'del paio piu bassi avvenuti nei seguenti siti' },
+                            { name: 'StockX:', value: `${stonks.lowestResellPrice.stockX}$`, inline: true },
+                            { name: 'FlightClub:', value: `${stonks.lowestResellPrice.flightClub}$`, inline: true },
+                            { name: 'Goat:', value: `${stonks.lowestResellPrice.goat}$`, inline: true },
+                            { name: 'StadiumGoods:', value: `${stonks.lowestResellPrice.stadiumGoods}$`, inline: true },
+                        )
+                        .setDescription(`Data Release: ${stonks.releaseDate}`);
+
+                    msg.channel.send(info)
+                    info.fields = [];
+                }
+            })
+
+        });
+    }
+
+});
 

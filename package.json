@@ -16,7 +16,6 @@
     "nodemon": "^2.0.6",
     "sneaks-api": "^1.1.1"
   },
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/LucaArgentieri/DiscordBot.git"
