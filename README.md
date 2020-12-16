@@ -8,7 +8,6 @@ TO DO :
 - Completamento lista !help \\ alla fine o aggiorna ogni tanto
 - elenco dei nuovi annunci \\ stessa storia delle scarpe piu popolari
 - Stile alla card \\ più avanti
-- Il comando deve funzionare in dm
 - Da fare il comando !resell (!resell #marca #modello #size)
 - cambiare colori card per ogni comando
 https://anidiots.guide/first-bot/using-embeds-in-messages
@@ -20,3 +19,4 @@ Done:
 - Rimuovere link (facendo vedere l'img)
 - fix !info quando sono piu di un paia nell'elenco
 - Formattazione data
+- Il comando deve funzionare in dm
