@@ -8,7 +8,6 @@ const Discord = require("discord.js");
 const bot = new Discord.Client();
 var fs = require('fs');
 const prefix = "!"
-
 bot.login(process.env.DISCORD_KEY);
 
 //Console.log Chat (per i dev)
@@ -21,21 +20,23 @@ bot.on('message', (msg) => {
     if (msg.content.toLocaleLowerCase().includes(`${prefix}`)) {
         return
     } else {
-        msg.author.send("Inserisci un comando valido, se hai bisogno di aiuto digita !help")
+        if (msg.author.tag !== "Pantofole#4586") {
+            msg.channel.send(`Inserisci un comando valido, se hai bisogno di aiuto digita !help`)
+        }
     }
 })
 
 //Presentati !ciao
 bot.on('message', (msg) => {
     if (msg.content.toLowerCase() == `${prefix}ciao`) {
-        msg.author.send('AO mo che so qui te aggiorno sulle paia, basta che me lo chiedi, scrivi !help per conoscere piu comandi *wink wink* :wink::wink::wink:  ');
+        msg.channel.send('AO mo che so qui te aggiorno sulle paia, basta che me lo chiedi, scrivi !help per conoscere piu comandi *wink wink* :wink::wink::wink:  ');
     }
 });
 
 //Help !help
 bot.on('message', (msg) => {
     if (msg.content.toLowerCase() == `${prefix}help`) {
-        msg.author.send('Ciao i comandi disponibili per questo bot sono:\n' + '```!presentati - non lo sappiamo nemmeno noi, provalo.\n!addlinks - per aggiungere i link per le raffle.\n!raffle - per elencare tutti i siti per iscriversi alle raffle in caso ti fossi perso qualche link.```');
+        msg.channel.send('Ciao i comandi disponibili per questo bot sono:\n' + '```!presentati - non lo sappiamo nemmeno noi, provalo.\n!addlinks - per aggiungere i link per le raffle.\n!raffle - per elencare tutti i siti per iscriversi alle raffle in caso ti fossi perso qualche link.```');
     }
 });
 
@@ -47,9 +48,9 @@ bot.on('message', (msg) => {
             var linkRicevuto = msg.content.substr(11, msg.length);
             if (linkRicevuto.substr(0, 5) == "https") {
                 fs.writeFile('Links.txt', "<" + linkRicevuto + ">", { flag: 'r+' }, err => { });
-                msg.author.send("done")
+                msg.channel.send("done")
             } else {
-                msg.author.send("MA BRO, NOOO MA CHE CAZZO FAI, VOGLIO SOLO I LINK")
+                msg.channel.send("MA BRO, NOOO MA CHE CAZZO FAI, VOGLIO SOLO I LINK")
             }
         }
         else {
@@ -57,9 +58,9 @@ bot.on('message', (msg) => {
             if (linkRicevuto.substr(0, 5) == "https") {
                 let data = arraylist + ("\n") + "<" + linkRicevuto + ">";
                 fs.writeFile('Links.txt', data, { flag: 'r+' }, err => { });
-                msg.author.send("done")
+                msg.channel.send("done")
             } else {
-                msg.author.send("MA BRO, NOOO MA CHE CAZZO FAI, VOGLIO SOLO I LINK")
+                msg.channel.send("MA BRO, NOOO MA CHE CAZZO FAI, VOGLIO SOLO I LINK")
             }
 
         }
@@ -73,7 +74,7 @@ bot.on('message', (msg) => {
         let linkRicevuto = "";
         fs.writeFile('Links.txt', linkRicevuto, { flag: 'w' }, err => { });
 
-        msg.author.send(`Lista pulita`);
+        msg.channel.send(`Lista pulita`);
     }
 
 });
@@ -84,80 +85,92 @@ bot.on('message', (msg) => {
         var arraylist = fs.readFileSync('Links.txt', 'utf8')
         console.log(arraylist)
         if (arraylist.length == 0) {
-            msg.author.send('\n Mi spiace, al momento non ci sono raffle disponibili!')
+            msg.channel.send('\n Mi spiace, al momento non ci sono raffle disponibili!')
         } else
-            msg.author.send(`Ecco i link per le raffle:\r\n` + `${arraylist}`);
+            msg.channel.send(`Ecco i link per le raffle:\r\n` + `${arraylist}`);
     }
 
 });
 
 
-//prezzo retail !retail (DA METTERE CONTROLLO SE MANCA IL NOME )
+//prezzo retail !retail (FIXARE PROBLEMA CON SLICE)
 bot.on('message', (msg) => {
     if (msg.content.substr(0, 7).toLowerCase() === `${prefix}retail`) {
         const x = msg.content.substr(7, msg.length);
-        console.log(x)
+        if (x.length <= 7) {
+            msg.channel.send(`Devi inserire il nome di una scarpa`);
+            return
+        } else {
+            sneaks.getProducts(x, function (err, products) {
+                try {
 
+                    const embed = new Discord.MessageEmbed()
 
-        sneaks.getProducts(x, function (err, products) {
+                    let data = products
+                    data.slice(0, 4).forEach(function (retail, i) {
 
+                        let info = embed.setImage(`${retail.thumbnail}`)
+                            .setTitle(`${retail.shoeName}`)
+                            .setDescription(`Prezzo retail: ${retail.retailPrice}$` + "\n" + `Data Release: ${moment(retail.releaseDate).format('LL')}`);
+                        msg.channel.send(info)
+                    });
 
-            const embed = new Discord.MessageEmbed()
-
-            let data = products
-            data.slice(0, 4).forEach(function (retail, i) {
-
-                let info = embed.setImage(`${retail.thumbnail}`)
-                    .setTitle(`${retail.shoeName}`)
-                    .setDescription(`Prezzo retail: ${retail.retailPrice}$` + "\n" + `Data Release: ${moment(retail.releaseDate).format('LL')}`);
-                console.log(data);
-                msg.author.send(info)
-            });
-        })
+                } catch (err) {
+                    console.error(err);
+                    msg.channel.send(`Errore ${err}`);
+                } finally {
+                    return
+                }
+            })
+        }
     }
 });
 
 //prezzo info !info (DA METTERE CONTROLLO SE MANCA IL NOME )
 bot.on('message', (msg) => {
     if (msg.content.substr(0, 5).toLowerCase() === `${prefix}info`) {
-
-
-
         const x = msg.content.substr(5, msg.length);
+        if (x.length <= 5) {
+            msg.channel.send(`Devi inserire il nome di una scarpa`);
+            return
+        } else {
 
-        sneaks.getProducts(x, function (err, products) {
-            try {
-                const embed = new Discord.MessageEmbed()
+            const x = msg.content.substr(5, msg.length);
 
-                products.slice(0, 4).forEach(function (resell) {
-                    console.log(resell);
-                    let info = embed
-                        .setImage(`${resell.thumbnail}`)
-                        .setColor('#0099ff')     //colore barra          
-                        .setTitle(`${resell.shoeName}`)
-                        .addFields(
-                            { name: 'Prezzo retail:', value: `${resell.retailPrice}$` },
-                            { name: 'Prezzi di resell', value: 'del paio piu bassi avvenuti nei seguenti siti' },
-                            { name: 'StockX:', value: `${resell.lowestResellPrice.stockX}$`, inline: true },
-                            { name: 'FlightClub:', value: `${resell.lowestResellPrice.flightClub}$`, inline: true },
-                            { name: 'Goat:', value: `${resell.lowestResellPrice.goat}$`, inline: true },
-                            { name: 'StadiumGoods:', value: `${resell.lowestResellPrice.stadiumGoods}$`, inline: true },
-                        )
-                        .setDescription(`Data Release: ${moment(resell.releaseDate).format('LL')}`);
+            sneaks.getProducts(x, function (err, products) {
+                try {
+                    const embed = new Discord.MessageEmbed()
 
-                    msg.author.send(info)
-                    info.fields = [];
+                    products.forEach(function (resell) {
+                        console.log(resell);
+                        let info = embed
+                            .setImage(`${resell.thumbnail}`)
+                            .setColor('#0099ff')     //colore barra          
+                            .setTitle(`${resell.shoeName}`)
+                            .addFields(
+                                { name: 'Prezzo retail:', value: `${resell.retailPrice}$` },
+                                { name: 'Prezzi di resell', value: 'del paio piu bassi avvenuti nei seguenti siti' },
+                                { name: 'StockX:', value: `${resell.lowestResellPrice.stockX}$`, inline: true },
+                                { name: 'FlightClub:', value: `${resell.lowestResellPrice.flightClub}$`, inline: true },
+                                { name: 'Goat:', value: `${resell.lowestResellPrice.goat}$`, inline: true },
+                                { name: 'StadiumGoods:', value: `${resell.lowestResellPrice.stadiumGoods}$`, inline: true },
+                            )
+                            .setDescription(`Data Release: ${moment(resell.releaseDate).format('LL')}`);
 
-                })
+                        msg.channel.send(info)
+                        info.fields = [];
 
-            } catch (err) {
-                console.error(err);
-                msg.author.send(`Errore ${err}`);
-            } finally {
-                return
-            }
-        })
+                    })
 
+                } catch (err) {
+                    console.error(err);
+                    msg.channel.send(`Errore ${err}`);
+                } finally {
+                    return
+                }
+            })
+
+        }
     }
 });
 
@@ -255,7 +268,7 @@ bot.on('message', (msg) => {
         var qstanno = oggi.getFullYear();
         var giorno = oggi.getFullYear() + '-' + (oggi.getMonth() + 1) + '-' + ("0" + oggi.getDate()).slice(-2);
         sneaks.getMostPopular(function (err, products) {
-            msg.author.send('Ecco a te le scarpe più popolari degli ultimi 3 mesi')
+            msg.channel.send('Ecco a te le scarpe più popolari degli ultimi 3 mesi')
             products.forEach(function (stonks) {
                 let d = stonks.releaseDate.substr(-2, 7);
                 let m = stonks.releaseDate.substr(-5, 2);
@@ -275,7 +288,7 @@ bot.on('message', (msg) => {
                         )
                         .setDescription(`Data Release: ${moment(stonks.releaseDate).format('LL')}`);
 
-                    msg.author.send(info)
+                    msg.channel.send(info)
                     info.fields = [];
                 }
             })
@@ -284,5 +297,3 @@ bot.on('message', (msg) => {
     }
 
 });
-
-
