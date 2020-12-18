@@ -111,7 +111,7 @@ bot.on('message', (msg) => {
 
                         let info = embed.setImage(`${retail.thumbnail}`)
                             .setTitle(`${retail.shoeName}`)
-                            .setDescription(`Prezzo retail: ${retail.retailPrice}$` + "\n" + `Data Release: ${moment(retail.releaseDate).format('LL')}`);
+                            .setDescription(`Prezzo retail: ${(retail.retailPrice === undefined) ? retail.retailPrice = 'N/A' : retail.retailPrice + '$'}` + "\n" + `Data Release: ${moment(retail.releaseDate).format('LL')}`);
                         msg.channel.send(info)
                     });
 
@@ -148,12 +148,12 @@ bot.on('message', (msg) => {
                             .setColor('#0099ff')     //colore barra          
                             .setTitle(`${resell.shoeName}`)
                             .addFields(
-                                { name: 'Prezzo retail:', value: `${resell.retailPrice}$` },
+                                { name: 'Prezzo retail', value: `${(resell.retailPrice === undefined) ? resell.retailPrice = 'N/A' : resell.retailPrice + '$'}` },
                                 { name: 'Prezzi di resell', value: 'del paio piu bassi avvenuti nei seguenti siti' },
-                                { name: 'StockX:', value: `${resell.lowestResellPrice.stockX}$`, inline: true },
-                                { name: 'FlightClub:', value: `${resell.lowestResellPrice.flightClub}$`, inline: true },
-                                { name: 'Goat:', value: `${resell.lowestResellPrice.goat}$`, inline: true },
-                                { name: 'StadiumGoods:', value: `${resell.lowestResellPrice.stadiumGoods}$`, inline: true },
+                                { name: 'StockX:', value: `${(resell.lowestResellPrice.stockX === undefined) ? resell.lowestResellPrice.stockX = 'N/A' : resell.lowestResellPrice.stockX + '$'}`, inline: true },
+                                { name: 'FlightClub:', value: `${(resell.lowestResellPrice.flightClub === undefined) ? resell.lowestResellPrice.flightClub = 'N/A' : resell.lowestResellPrice.flightClub + '$'}`, inline: true },
+                                { name: 'Goat:', value: `${(resell.lowestResellPrice.goat === undefined) ? resell.lowestResellPrice.goat = 'N/A' : resell.lowestResellPrice.goat + '$'}`, inline: true },
+                                { name: 'StadiumGoods:', value: `${(resell.lowestResellPrice.stadiumGoods === undefined) ? resell.lowestResellPrice.stadiumGoods = 'N/A' : resell.lowestResellPrice.stadiumGoods + '$'}`, inline: true },
                             )
                             .setDescription(`Data Release: ${moment(resell.releaseDate).format('LL')}`);
 
@@ -186,29 +186,41 @@ bot.on('message', (msg) => {
         let info = embed
             .setImage('https://i.pinimg.com/originals/65/ba/48/65ba488626025cff82f091336fbf94bb.gif')
             .setTitle('Attendere..')
+
+        msg.channel.send(info);
+
         var oggi = new Date()
         var giorno = oggi.getFullYear() + '-' + (oggi.getMonth() + 1) + '-' + ("0" + oggi.getDate()).slice(-2);
-        console.log(giorno)
+
         sneaks.getProducts(giorno, function (err, products) {
+            try {
+                msg.channel.send('Ecco a te le prossime uscite')
+                setTimeout(() => {
+                    products.forEach(function (prossimo) {
+                        let info = embed
+                            .setImage(`${prossimo.thumbnail}`)
+                            .setColor('#008000')     //colore barra          
+                            .setTitle(`${prossimo.shoeName}`)
+                            .addFields(
+                                { name: 'Prezzo retail:', value: `${(prossimo.retailPrice === undefined) ? prossimo.retailPrice = 'N/A' : prossimo.retailPrice + '$'}` },
+                                { name: 'Prezzi di resell', value: 'del paio piu bassi avvenuti nei seguenti siti' },
+                                { name: 'StockX:', value: `${(prossimo.lowestResellPrice.stockX === undefined) ? prossimo.lowestResellPrice.stockX = 'N/A' : prossimo.lowestResellPrice.stockX + '$'}`, inline: true },
+                                { name: 'FlightClub:', value: `${(prossimo.lowestResellPrice.flightClub === undefined) ? prossimo.lowestResellPrice.flightClub = 'N/A' : prossimo.lowestResellPrice.flightClub + '$'}`, inline: true },
+                                { name: 'Goat:', value: `${(prossimo.lowestResellPrice.goat === undefined) ? prossimo.lowestResellPrice.goat = 'N/A' : prossimo.lowestResellPrice.goat + '$'}`, inline: true },
+                                { name: 'StadiumGoods:', value: `${(prossimo.lowestResellPrice.stadiumGoods === undefined) ? prossimo.lowestResellPrice.stadiumGoods = 'N/A' : prossimo.lowestResellPrice.stadiumGoods + '$'}`, inline: true },
+                            )
+                            .setDescription(`Data Release: ${moment(prossimo.releaseDate).format('LL')}`);
 
-            products.forEach(function (prossimo) {
-                let info = embed
-                    .setImage(`${prossimo.thumbnail}`)
-                    .setColor('#008000')     //colore barra          
-                    .setTitle(`${prossimo.shoeName}`)
-                    .addFields(
-                        { name: 'Prezzo retail:', value: `${prossimo.retailPrice}$` },
-                        { name: 'Prezzi di resell', value: 'del paio piu bassi avvenuti nei seguenti siti' },
-                        { name: 'StockX:', value: `${prossimo.lowestResellPrice.stockX}$`, inline: true },
-                        { name: 'FlightClub:', value: `${prossimo.lowestResellPrice.flightClub}$`, inline: true },
-                        { name: 'Goat:', value: `${prossimo.lowestResellPrice.goat}$`, inline: true },
-                        { name: 'StadiumGoods:', value: `${prossimo.lowestResellPrice.stadiumGoods}$`, inline: true },
-                    )
-                    .setDescription(`Data Release: ${moment(prossimo.releaseDate).format('LL')}`);
-
-                msg.channel.send(info)
-                info.fields = [];
-            })
+                        msg.channel.send(info)
+                        info.fields = [];
+                    })
+                }, 2000);
+            } catch (err) {
+                console.error(err);
+                msg.channel.send(`Errore ${err}`);
+            } finally {
+                return
+            }
         })
     }
 });
@@ -222,32 +234,38 @@ bot.on('message', (msg) => {
         var x = qstanno + '-' + qstmese;
         console.log(qstanno)
         sneaks.getProducts(x, function (err, products) {
+            try {
+                const embed = new Discord.MessageEmbed()
 
-            const embed = new Discord.MessageEmbed()
+                products.forEach(function (prossimo) {
+                    let m = prossimo.releaseDate.substr(-5, 2);
+                    let y = prossimo.releaseDate.substr(0, 4);
 
-            products.forEach(function (prossimo) {
-                let m = prossimo.releaseDate.substr(-5, 2);
-                let y = prossimo.releaseDate.substr(0, 4);
+                    if (m == qstmese) {
+                        let info = embed
+                            .setImage(`${prossimo.thumbnail}`)
+                            .setColor('#008000')     //colore barra          
+                            .setTitle(`${prossimo.shoeName}`)
+                            .addFields(
+                                { name: 'Prezzo retail:', value: `${(prossimo.retailPrice === undefined) ? prossimo.retailPrice = 'N/A' : prossimo.retailPrice + '$'}` },
+                                { name: 'Prezzi di resell', value: 'del paio piu bassi avvenuti nei seguenti siti' },
+                                { name: 'StockX:', value: `${(prossimo.lowestResellPrice.stockX === undefined) ? prossimo.lowestResellPrice.stockX = 'N/A' : prossimo.lowestResellPrice.stockX + '$'}`, inline: true },
+                                { name: 'FlightClub:', value: `${(prossimo.lowestResellPrice.flightClub === undefined) ? prossimo.lowestResellPrice.flightClub = 'N/A' : prossimo.lowestResellPrice.flightClub + '$'}`, inline: true },
+                                { name: 'Goat:', value: `${(prossimo.lowestResellPrice.goat === undefined) ? prossimo.lowestResellPrice.goat = 'N/A' : prossimo.lowestResellPrice.goat + '$'}`, inline: true },
+                                { name: 'StadiumGoods:', value: `${(prossimo.lowestResellPrice.stadiumGoods === undefined) ? prossimo.lowestResellPrice.stadiumGoods = 'N/A' : prossimo.lowestResellPrice.stadiumGoods + '$'}`, inline: true },
+                            )
+                            .setDescription(`Data Release: ${moment(prossimo.releaseDate).format('LL')}`);
 
-                if (m == qstmese) {
-                    let info = embed
-                        .setImage(`${prossimo.thumbnail}`)
-                        .setColor('#008000')     //colore barra          
-                        .setTitle(`${prossimo.shoeName}`)
-                        .addFields(
-                            { name: 'Prezzo retail:', value: `${prossimo.retailPrice}$` },
-                            { name: 'Prezzi di resell', value: 'del paio piu bassi avvenuti nei seguenti siti' },
-                            { name: 'StockX:', value: `${prossimo.lowestResellPrice.stockX}$`, inline: true },
-                            { name: 'FlightClub:', value: `${prossimo.lowestResellPrice.flightClub}$`, inline: true },
-                            { name: 'Goat:', value: `${prossimo.lowestResellPrice.goat}$`, inline: true },
-                            { name: 'StadiumGoods:', value: `${prossimo.lowestResellPrice.stadiumGoods}$`, inline: true },
-                        )
-                        .setDescription(`Data Release: ${moment(prossimo.releaseDate).format('LL')}`);
-
-                    msg.channel.send(info)
-                    info.fields = [];
-                }
-            })
+                        msg.channel.send(info)
+                        info.fields = [];
+                    }
+                })
+            } catch (err) {
+                console.error(err);
+                msg.channel.send(`Errore ${err}`);
+            } finally {
+                return
+            }
         })
     }
 });
@@ -262,37 +280,51 @@ bot.on('message', (msg) => {
 
         msg.channel.send(info);
 
+
+
+
         var oggi = new Date()
         var qstg = ("0" + oggi.getDate()).slice(-2)
         var qstmese = oggi.getMonth() + 1;
         var qstanno = oggi.getFullYear();
         var giorno = oggi.getFullYear() + '-' + (oggi.getMonth() + 1) + '-' + ("0" + oggi.getDate()).slice(-2);
+
+
         sneaks.getMostPopular(function (err, products) {
-            msg.channel.send('Ecco a te le scarpe più popolari degli ultimi 3 mesi')
-            products.forEach(function (stonks) {
-                let d = stonks.releaseDate.substr(-2, 7);
-                let m = stonks.releaseDate.substr(-5, 2);
-                let y = stonks.releaseDate.substr(0, 4);
-                if (y >= qstanno && m == qstmese || y >= qstanno && m == qstmese - 1 || y >= qstanno && m == qstmese - 2) {
-                    let info = embed
-                        .setImage(`${stonks.thumbnail}`)
-                        .setColor('#f0f8ff')     //colore barra          
-                        .setTitle(`${stonks.shoeName}`)
-                        .addFields(
-                            { name: 'Prezzo retail:', value: `${stonks.retailPrice}$` },
-                            { name: 'Prezzi di resell', value: 'del paio piu bassi avvenuti nei seguenti siti' },
-                            { name: 'StockX:', value: `${stonks.lowestResellPrice.stockX}$`, inline: true },
-                            { name: 'FlightClub:', value: `${stonks.lowestResellPrice.flightClub}$`, inline: true },
-                            { name: 'Goat:', value: `${stonks.lowestResellPrice.goat}$`, inline: true },
-                            { name: 'StadiumGoods:', value: `${stonks.lowestResellPrice.stadiumGoods}$`, inline: true },
-                        )
-                        .setDescription(`Data Release: ${moment(stonks.releaseDate).format('LL')}`);
+            try {
+                msg.channel.send('Ecco a te le scarpe più popolari degli ultimi 3 mesi')
+                setTimeout(() => {
+                    products.forEach(function (stonks) {
+                        let d = stonks.releaseDate.substr(-2, 7);
+                        let m = stonks.releaseDate.substr(-5, 2);
+                        let y = stonks.releaseDate.substr(0, 4);
+                        if (y >= qstanno && m == qstmese || y >= qstanno && m == qstmese - 1 || y >= qstanno && m == qstmese - 2) {
+                            let info = embed
+                                .setImage(`${stonks.thumbnail}`)
+                                .setColor('#f0f8ff')     //colore barra          
+                                .setTitle(`${stonks.shoeName}`)
+                                .addFields(
+                                    { name: 'Prezzo retail:', value: `${(stonks.retailPrice === undefined) ? stonks.retailPrice = 'N/A' : stonks.retailPrice + '$'}` },
+                                    { name: 'Prezzi di resell', value: 'del paio piu bassi avvenuti nei seguenti siti' },
+                                    { name: 'StockX:', value: `${(stonks.lowestResellPrice.stockX === undefined) ? stonks.lowestResellPrice.stockX = 'N/A' : stonks.lowestResellPrice.stockX + '$'}`, inline: true },
+                                    { name: 'FlightClub:', value: `${(stonks.lowestResellPrice.flightClub === undefined) ? stonks.lowestResellPrice.flightClub = 'N/A' : stonks.lowestResellPrice.flightClub + '$'}`, inline: true },
+                                    { name: 'Goat:', value: `${(stonks.lowestResellPrice.goat === undefined) ? stonks.lowestResellPrice.goat = 'N/A' : stonks.lowestResellPrice.goat + '$'}`, inline: true },
+                                    { name: 'StadiumGoods:', value: `${(stonks.lowestResellPrice.stadiumGoods === undefined) ? stonks.lowestResellPrice.stadiumGoods + 'N/A' : stonks.lowestResellPrice.stadiumGoods + '$'}`, inline: true },
+                                )
+                                .setDescription(`Data Release: ${moment(stonks.releaseDate).format('LL')}`);
 
-                    msg.channel.send(info)
-                    info.fields = [];
-                }
-            })
+                            msg.channel.send(info)
+                            info.fields = [];
 
+                        }
+                    })
+                }, 2000);
+            } catch (err) {
+                console.error(err);
+                msg.channel.send(`Errore ${err}`);
+            } finally {
+                return
+            }
         });
     }
 
