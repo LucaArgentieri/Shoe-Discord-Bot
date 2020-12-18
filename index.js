@@ -126,7 +126,7 @@ bot.on('message', (msg) => {
     }
 });
 
-//prezzo info !info (DA METTERE CONTROLLO SE MANCA IL NOME )
+//prezzo info !info 
 bot.on('message', (msg) => {
     if (msg.content.substr(0, 5).toLowerCase() === `${prefix}info`) {
         const x = msg.content.substr(5, msg.length);
@@ -329,3 +329,12 @@ bot.on('message', (msg) => {
     }
 
 });
+
+// NOME VARIABILE(!comando + nome scarpa + numero) al posto del codice "FY2903"
+sneaks.getProductPrices("FY2903", function (err, product) {
+    console.log(product.resellPrices.goat['4'])
+    console.log(product.resellPrices.stockX['4'])
+    console.log(product.resellPrices.flightClub['4'])
+    console.log(product.resellPrices.stadiumGoods['4'])
+})
+
