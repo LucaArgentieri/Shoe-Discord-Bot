@@ -126,53 +126,125 @@ bot.on('message', (msg) => {
     }
 });
 
-//prezzo info !info 
+//prezzo info !info
 bot.on('message', (msg) => {
     if (msg.content.substr(0, 5).toLowerCase() === `${prefix}info`) {
+
         const x = msg.content.substr(5, msg.length);
+        let filter = m => m.author.id === msg.author.id
+
         if (x.length <= 5) {
             msg.channel.send(`Devi inserire il nome di una scarpa`);
             return
-        } else {
+        }
 
-            const x = msg.content.substr(5, msg.length);
+        msg.channel.send(`Desideri cercare un numero specifico? Se si digita ${prefix} + numero altrimenti digita ${prefix}no`)
 
-            sneaks.getProducts(x, function (err, products) {
-                try {
-                    const embed = new Discord.MessageEmbed()
 
-                    products.forEach(function (resell) {
-                        console.log(resell);
-                        let info = embed
-                            .setImage(`${resell.thumbnail}`)
-                            .setColor('#0099ff')     //colore barra          
-                            .setTitle(`${resell.shoeName}`)
-                            .addFields(
-                                { name: 'Prezzo retail', value: `${(resell.retailPrice === undefined) ? resell.retailPrice = 'N/A' : resell.retailPrice + '$'}` },
-                                { name: 'Prezzi di resell', value: 'del paio piu bassi avvenuti nei seguenti siti' },
-                                { name: 'StockX:', value: `${(resell.lowestResellPrice.stockX === undefined) ? resell.lowestResellPrice.stockX = 'N/A' : resell.lowestResellPrice.stockX + '$'}`, inline: true },
-                                { name: 'FlightClub:', value: `${(resell.lowestResellPrice.flightClub === undefined) ? resell.lowestResellPrice.flightClub = 'N/A' : resell.lowestResellPrice.flightClub + '$'}`, inline: true },
-                                { name: 'Goat:', value: `${(resell.lowestResellPrice.goat === undefined) ? resell.lowestResellPrice.goat = 'N/A' : resell.lowestResellPrice.goat + '$'}`, inline: true },
-                                { name: 'StadiumGoods:', value: `${(resell.lowestResellPrice.stadiumGoods === undefined) ? resell.lowestResellPrice.stadiumGoods = 'N/A' : resell.lowestResellPrice.stadiumGoods + '$'}`, inline: true },
-                            )
-                            .setDescription(`Data Release: ${moment(resell.releaseDate).format('LL')}`);
+        msg.channel.awaitMessages(filter, {
+            max: 1,
+            time: 30000,
+            errors: ['time']
+        })
 
-                        msg.channel.send(info)
-                        info.fields = [];
+            .then(msg => {
+                msg = msg.first()
 
+                if (msg.content === `${prefix}no`) {
+                    sneaks.getProducts(x, function (err, products) {
+                        try {
+                            const embed = new Discord.MessageEmbed()
+
+                            products.forEach(function (resell) {
+                                console.log(resell);
+                                let info = embed
+                                    .setImage(`${resell.thumbnail}`)
+                                    .setColor('#0099ff')     //colore barra          
+                                    .setTitle(`${resell.shoeName}`)
+                                    .addFields(
+                                        { name: 'Prezzo retail', value: `${(resell.retailPrice === undefined) ? resell.retailPrice = 'N/A' : resell.retailPrice + '$'}` },
+                                        { name: 'Prezzi di resell', value: 'del paio piu bassi avvenuti nei seguenti siti' },
+                                        { name: 'StockX:', value: `${(resell.lowestResellPrice.stockX === undefined) ? resell.lowestResellPrice.stockX = 'N/A' : resell.lowestResellPrice.stockX + '$'}`, inline: true },
+                                        { name: 'FlightClub:', value: `${(resell.lowestResellPrice.flightClub === undefined) ? resell.lowestResellPrice.flightClub = 'N/A' : resell.lowestResellPrice.flightClub + '$'}`, inline: true },
+                                        { name: 'Goat:', value: `${(resell.lowestResellPrice.goat === undefined) ? resell.lowestResellPrice.goat = 'N/A' : resell.lowestResellPrice.goat + '$'}`, inline: true },
+                                        { name: 'StadiumGoods:', value: `${(resell.lowestResellPrice.stadiumGoods === undefined) ? resell.lowestResellPrice.stadiumGoods = 'N/A' : resell.lowestResellPrice.stadiumGoods + '$'}`, inline: true },
+                                    )
+                                    .setDescription(`Data Release: ${moment(resell.releaseDate).format('LL')}`);
+
+                                msg.channel.send(info)
+                                info.fields = [];
+
+                            })
+
+                        } catch (err) {
+                            console.error(err);
+                            msg.channel.send(`Errore ${err}`);
+                        } finally {
+                            return
+                        }
+                    })
+                    return // per bloccare il codice e non far cercare per numero
+                }
+
+
+                if (msg.content > `${prefix}3` || msg.content < `${prefix}18`) {
+                    let numeroRicevuto = msg.content.substr(1, msg.length)
+
+
+                    sneaks.getProducts(x, function (err, products) {
+
+                        try {
+
+                            const embed = new Discord.MessageEmbed()
+
+                            products.forEach(function (resell) {
+
+                                //Prende l'id scarpa e lo usiamo per cercare il singolo prezzo in base al numero di scarpa
+                                sneaks.getProductPrices(resell.styleID, function (err, resell2) {
+                                    console.log(resell2)
+                                    let info = embed
+                                        .setImage(`${resell.thumbnail}`)
+                                        .setColor('#0099ff')     //colore barra          
+                                        .setTitle(`${resell.shoeName}\nNumero selezionato: ${numeroRicevuto}`)
+                                        .addFields(
+                                            { name: 'Prezzo retail', value: `${(resell.retailPrice === undefined) ? resell.retailPrice = 'N/A' : resell.retailPrice + '$'}` },
+                                            { name: 'Prezzi di resell', value: 'del paio piu bassi avvenuti nei seguenti siti' },
+
+                                            { name: 'StockX:', value: `${(resell2.resellPrices.stockX === undefined) ? resell2.resellPrices.stockX = 'N/A' : resell2.resellPrices.stockX[numeroRicevuto] + '$'}`, inline: true },
+
+                                            { name: 'FlightClub:', value: `${(resell2.resellPrices.flightClub === undefined) ? resell2.resellPrices.flightClub = 'N/A' : resell2.resellPrices.flightClub[numeroRicevuto] + '$'}`, inline: true },
+
+                                            { name: 'Goat:', value: `${(resell2.resellPrices.goat === undefined) ? resell2.resellPrices.goat = 'N/A' : resell2.resellPrices.goat[numeroRicevuto] + '$'}`, inline: true },
+
+                                            { name: 'StadiumGoods:', value: `${(resell2.lowestResellPrice.stadiumGoods === undefined) ? resell2.lowestResellPrice.stadiumGoods = 'N/A' : resell2.lowestResellPrice.stadiumGoods + '$'}`, inline: true },
+                                        )
+                                        .setDescription(`Data Release: ${moment(resell.releaseDate).format('LL')}`);
+
+                                    msg.channel.send(info)
+                                    info.fields = [];
+                                })
+                            })
+                        } catch (err) {
+                            console.error(err);
+                            msg.channel.send(`Errore ${err}`);
+                        } finally {
+                            return
+                        }
                     })
 
-                } catch (err) {
-                    console.error(err);
-                    msg.channel.send(`Errore ${err}`);
-                } finally {
+                } else {
+                    msg.channel.send(`Reinserisci il comando inserendo un numero compreso tra 4 e 17`)
                     return
                 }
             })
+            .catch(collected => {
+                msg.channel.send('Tempo scaduto');
+            });
 
-        }
     }
 });
+
+
 
 
 
@@ -329,12 +401,4 @@ bot.on('message', (msg) => {
     }
 
 });
-
-// NOME VARIABILE(!comando + nome scarpa + numero) al posto del codice "FY2903"
-sneaks.getProductPrices("FY2903", function (err, product) {
-    console.log(product.resellPrices.goat['4'])
-    console.log(product.resellPrices.stockX['4'])
-    console.log(product.resellPrices.flightClub['4'])
-    console.log(product.resellPrices.stadiumGoods['4'])
-})
 
