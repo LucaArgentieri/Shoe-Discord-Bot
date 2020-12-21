@@ -36,7 +36,26 @@ bot.on('message', (msg) => {
 //Help !help
 bot.on('message', (msg) => {
     if (msg.content.toLowerCase() == `${prefix}help`) {
-        msg.channel.send('Ciao i comandi disponibili per questo bot sono:\n' + '```!presentati - non lo sappiamo nemmeno noi, provalo.\n!addlinks - per aggiungere i link per le raffle.\n!raffle - per elencare tutti i siti per iscriversi alle raffle in caso ti fossi perso qualche link.```');
+
+        const embed = new Discord.MessageEmbed()
+
+
+        let info = embed
+            .setColor('#E3655B')
+            .setTitle(`Lista comandi`)
+            .addFields(
+                { name: '!presentati:', value: `Non lo sappiamo nemmeno noi, provalo.` },
+                { name: '!addraffle:', value: `Per aggiungere i link per le raffle.` },
+                { name: '!raffle:', value: `Per elencare tutti i siti per iscriversi alle raffle in caso ti fossi perso qualche link.` },
+                { name: '!rr:', value: `Per pulire la lista delle raffle.` },
+                { name: '!retail:', value: `Per avere informazioni di una scarpa a retail.` },
+                { name: '!info:', value: `Per avere informazioni dei prezzi di resell generici oppure in base al numero desiderato.` },
+                { name: '!newrelease:', value: `Per rimanere aggiornato sulle prossime uscite.` },
+                { name: '!dropmese:', value: `Per rimanere aggiornato sulle uscite del mese corrente.` },
+                { name: '!stonks:', value: `Per vedere le scapre più popolari negli ultimi tre mesi.` }
+            )
+
+        msg.author.send(info)
     }
 });
 
@@ -48,9 +67,9 @@ bot.on('message', (msg) => {
             var linkRicevuto = msg.content.substr(11, msg.length);
             if (linkRicevuto.substr(0, 5) == "https") {
                 fs.writeFile('Links.txt', "<" + linkRicevuto + ">", { flag: 'r+' }, err => { });
-                msg.channel.send("done")
+                msg.author.send("done")
             } else {
-                msg.channel.send("MA BRO, NOOO MA CHE CAZZO FAI, VOGLIO SOLO I LINK")
+                msg.author.send("MA BRO, NOOO MA CHE CAZZO FAI, VOGLIO SOLO I LINK")
             }
         }
         else {
@@ -58,9 +77,9 @@ bot.on('message', (msg) => {
             if (linkRicevuto.substr(0, 5) == "https") {
                 let data = arraylist + ("\n") + "<" + linkRicevuto + ">";
                 fs.writeFile('Links.txt', data, { flag: 'r+' }, err => { });
-                msg.channel.send("done")
+                msg.author.send("done")
             } else {
-                msg.channel.send("MA BRO, NOOO MA CHE CAZZO FAI, VOGLIO SOLO I LINK")
+                msg.author.send("MA BRO, NOOO MA CHE CAZZO FAI, VOGLIO SOLO I LINK")
             }
 
         }
@@ -74,7 +93,7 @@ bot.on('message', (msg) => {
         let linkRicevuto = "";
         fs.writeFile('Links.txt', linkRicevuto, { flag: 'w' }, err => { });
 
-        msg.channel.send(`Lista pulita`);
+        msg.author.send(`Lista pulita`);
     }
 
 });
@@ -85,20 +104,20 @@ bot.on('message', (msg) => {
         var arraylist = fs.readFileSync('Links.txt', 'utf8')
         console.log(arraylist)
         if (arraylist.length == 0) {
-            msg.channel.send('\n Mi spiace, al momento non ci sono raffle disponibili!')
+            msg.author.send('\n Mi spiace, al momento non ci sono raffle disponibili!')
         } else
-            msg.channel.send(`Ecco i link per le raffle:\r\n` + `${arraylist}`);
+            msg.author.send(`Ecco i link per le raffle:\r\n` + `${arraylist}`);
     }
 
 });
 
 
-//prezzo retail !retail (FIXARE PROBLEMA CON SLICE)
+//prezzo retail !retail
 bot.on('message', (msg) => {
     if (msg.content.substr(0, 7).toLowerCase() === `${prefix}retail`) {
         const x = msg.content.substr(7, msg.length);
         if (x.length <= 7) {
-            msg.channel.send(`Devi inserire il nome di una scarpa`);
+            msg.author.send(`Devi inserire il nome di una scarpa`);
             return
         } else {
             sneaks.getProducts(x, function (err, products) {
@@ -110,14 +129,18 @@ bot.on('message', (msg) => {
                     data.slice(0, 4).forEach(function (retail, i) {
 
                         let info = embed.setImage(`${retail.thumbnail}`)
+                            .setColor('#E3655B')
                             .setTitle(`${retail.shoeName}`)
-                            .setDescription(`Prezzo retail: ${(retail.retailPrice === undefined) ? retail.retailPrice = 'N/A' : retail.retailPrice + '$'}` + "\n" + `Data Release: ${moment(retail.releaseDate).format('LL')}`);
-                        msg.channel.send(info)
+                            .setDescription(`Data Release: ${moment(retail.releaseDate).format('LL')}`)
+                            .addFields(
+                                { name: 'Prezzo retail:', value: `${(retail.retailPrice === undefined) ? retail.retailPrice = 'N/A' : retail.retailPrice + '$'}` }
+                            )
+                        msg.author.send(info)
                     });
 
                 } catch (err) {
                     console.error(err);
-                    msg.channel.send(`Errore ${err}`);
+                    msg.author.send(`Errore ${err}`);
                 } finally {
                     return
                 }
@@ -134,11 +157,11 @@ bot.on('message', (msg) => {
         let filter = m => m.author.id === msg.author.id
 
         if (x.length <= 5) {
-            msg.channel.send(`Devi inserire il nome di una scarpa`);
+            msg.author.send(`Devi inserire il nome di una scarpa`);
             return
         }
 
-        msg.channel.send(`Desideri cercare un numero specifico? Se si digita ${prefix} + numero altrimenti digita ${prefix}no`)
+        msg.author.send(`Desideri cercare un numero specifico? Se si digita ${prefix} + numero altrimenti digita ${prefix}no`)
 
 
         msg.channel.awaitMessages(filter, {
@@ -159,10 +182,10 @@ bot.on('message', (msg) => {
                                 console.log(resell);
                                 let info = embed
                                     .setImage(`${resell.thumbnail}`)
-                                    .setColor('#0099ff')     //colore barra          
+                                    .setColor('#CFD186')     //colore barra          
                                     .setTitle(`${resell.shoeName}`)
                                     .addFields(
-                                        { name: 'Prezzo retail', value: `${(resell.retailPrice === undefined) ? resell.retailPrice = 'N/A' : resell.retailPrice + '$'}` },
+                                        { name: 'Prezzo retail:', value: `${(resell.retailPrice === undefined) ? resell.retailPrice = 'N/A' : resell.retailPrice + '$'}` },
                                         { name: 'Prezzi di resell', value: 'del paio piu bassi avvenuti nei seguenti siti' },
                                         { name: 'StockX:', value: `${(resell.lowestResellPrice.stockX === undefined) ? resell.lowestResellPrice.stockX = 'N/A' : resell.lowestResellPrice.stockX + '$'}`, inline: true },
                                         { name: 'FlightClub:', value: `${(resell.lowestResellPrice.flightClub === undefined) ? resell.lowestResellPrice.flightClub = 'N/A' : resell.lowestResellPrice.flightClub + '$'}`, inline: true },
@@ -171,14 +194,14 @@ bot.on('message', (msg) => {
                                     )
                                     .setDescription(`Data Release: ${moment(resell.releaseDate).format('LL')}`);
 
-                                msg.channel.send(info)
+                                msg.author.send(info)
                                 info.fields = [];
 
                             })
 
                         } catch (err) {
                             console.error(err);
-                            msg.channel.send(`Errore ${err}`);
+                            msg.author.send(`Errore ${err}`);
                         } finally {
                             return
                         }
@@ -204,41 +227,43 @@ bot.on('message', (msg) => {
                                     console.log(resell2)
                                     let info = embed
                                         .setImage(`${resell.thumbnail}`)
-                                        .setColor('#0099ff')     //colore barra          
+                                        .setColor('#CFD186')     //colore barra          
                                         .setTitle(`${resell.shoeName}\nNumero selezionato: ${numeroRicevuto}`)
                                         .addFields(
-                                            { name: 'Prezzo retail', value: `${(resell.retailPrice === undefined) ? resell.retailPrice = 'N/A' : resell.retailPrice + '$'}` },
+                                            { name: 'Prezzo retail:', value: `${(resell.retailPrice === undefined) ? resell.retailPrice = 'N/A' : resell.retailPrice + '$'}` },
+
                                             { name: 'Prezzi di resell', value: 'del paio piu bassi avvenuti nei seguenti siti' },
 
-                                            { name: 'StockX:', value: `${(resell2.resellPrices.stockX === undefined) ? resell2.resellPrices.stockX = 'N/A' : resell2.resellPrices.stockX[numeroRicevuto] + '$'}`, inline: true },
+                                            { name: 'StockX:', value: `${(resell2.resellPrices.stockX[numeroRicevuto] === undefined) ? resell2.resellPrices.stockX = 'N/A' : resell2.resellPrices.stockX[numeroRicevuto] + '$'}`, inline: true },
 
-                                            { name: 'FlightClub:', value: `${(resell2.resellPrices.flightClub === undefined) ? resell2.resellPrices.flightClub = 'N/A' : resell2.resellPrices.flightClub[numeroRicevuto] + '$'}`, inline: true },
+                                            { name: 'FlightClub:', value: `${(resell2.resellPrices.flightClub[numeroRicevuto] === undefined) ? resell2.resellPrices.flightClub = 'N/A' : resell2.resellPrices.flightClub[numeroRicevuto] + '$'}`, inline: true },
 
-                                            { name: 'Goat:', value: `${(resell2.resellPrices.goat === undefined) ? resell2.resellPrices.goat = 'N/A' : resell2.resellPrices.goat[numeroRicevuto] + '$'}`, inline: true },
+                                            { name: 'Goat:', value: `${(resell2.resellPrices.goat === undefined || resell2.resellPrices.goat[numeroRicevuto] === undefined) ? resell2.resellPrices.goat = 'N/A' : resell2.resellPrices.goat[numeroRicevuto] + '$'}`, inline: true },
 
-                                            { name: 'StadiumGoods:', value: `${(resell2.lowestResellPrice.stadiumGoods === undefined) ? resell2.lowestResellPrice.stadiumGoods = 'N/A' : resell2.lowestResellPrice.stadiumGoods + '$'}`, inline: true },
+                                            { name: 'StadiumGoods:', value: `${(resell2.resellPrices.stadiumGoods[numeroRicevuto] === undefined) ? resell2.resellPrices.stadiumGoods = 'N/A' : resell2.resellPrices.stadiumGoods[numeroRicevuto] + '$'}`, inline: true },
                                         )
-                                        .setDescription(`Data Release: ${moment(resell.releaseDate).format('LL')}`);
+                                        .setDescription(`Data Release: ${(resell.releaseDate === null) ? resell.releaseDate = 'Data non disponibile' : moment(resell.releaseDate).format('LL')}`)
 
-                                    msg.channel.send(info)
+
+                                    msg.author.send(info)
                                     info.fields = [];
                                 })
                             })
                         } catch (err) {
                             console.error(err);
-                            msg.channel.send(`Errore ${err}`);
+                            msg.author.send(`Errore ${err}`);
                         } finally {
                             return
                         }
                     })
 
                 } else {
-                    msg.channel.send(`Reinserisci il comando inserendo un numero compreso tra 4 e 17`)
+                    msg.author.send(`Reinserisci il comando inserendo un numero compreso tra 4 e 17`)
                     return
                 }
             })
             .catch(collected => {
-                msg.channel.send('Tempo scaduto');
+                msg.author.send('Tempo scaduto');
             });
 
     }
@@ -258,20 +283,21 @@ bot.on('message', (msg) => {
         let info = embed
             .setImage('https://i.pinimg.com/originals/65/ba/48/65ba488626025cff82f091336fbf94bb.gif')
             .setTitle('Attendere..')
+            .setColor('#5B8C5A')
 
-        msg.channel.send(info);
+        msg.author.send(info);
 
         var oggi = new Date()
         var giorno = oggi.getFullYear() + '-' + (oggi.getMonth() + 1) + '-' + ("0" + oggi.getDate()).slice(-2);
 
         sneaks.getProducts(giorno, function (err, products) {
             try {
-                msg.channel.send('Ecco a te le prossime uscite')
+                msg.author.send('Ecco a te le prossime uscite')
                 setTimeout(() => {
                     products.forEach(function (prossimo) {
                         let info = embed
                             .setImage(`${prossimo.thumbnail}`)
-                            .setColor('#008000')     //colore barra          
+                            .setColor('#5B8C5A')     //colore barra          
                             .setTitle(`${prossimo.shoeName}`)
                             .addFields(
                                 { name: 'Prezzo retail:', value: `${(prossimo.retailPrice === undefined) ? prossimo.retailPrice = 'N/A' : prossimo.retailPrice + '$'}` },
@@ -283,13 +309,13 @@ bot.on('message', (msg) => {
                             )
                             .setDescription(`Data Release: ${moment(prossimo.releaseDate).format('LL')}`);
 
-                        msg.channel.send(info)
+                        msg.author.send(info)
                         info.fields = [];
                     })
                 }, 2000);
             } catch (err) {
                 console.error(err);
-                msg.channel.send(`Errore ${err}`);
+                msg.author.send(`Errore ${err}`);
             } finally {
                 return
             }
@@ -300,11 +326,12 @@ bot.on('message', (msg) => {
 //release del mese !dropmese (AGGIUNGERE AWAIT)
 bot.on('message', (msg) => {
     if (msg.content.toLowerCase() === `${prefix}dropmese`) {
+
         var oggi = new Date()
         var qstmese = oggi.getMonth() + 1;
         var qstanno = oggi.getFullYear();
         var x = qstanno + '-' + qstmese;
-        console.log(qstanno)
+
         sneaks.getProducts(x, function (err, products) {
             try {
                 const embed = new Discord.MessageEmbed()
@@ -316,7 +343,7 @@ bot.on('message', (msg) => {
                     if (m == qstmese) {
                         let info = embed
                             .setImage(`${prossimo.thumbnail}`)
-                            .setColor('#008000')     //colore barra          
+                            .setColor('#69306D')     //colore barra          
                             .setTitle(`${prossimo.shoeName}`)
                             .addFields(
                                 { name: 'Prezzo retail:', value: `${(prossimo.retailPrice === undefined) ? prossimo.retailPrice = 'N/A' : prossimo.retailPrice + '$'}` },
@@ -328,13 +355,13 @@ bot.on('message', (msg) => {
                             )
                             .setDescription(`Data Release: ${moment(prossimo.releaseDate).format('LL')}`);
 
-                        msg.channel.send(info)
+                        msg.author.send(info)
                         info.fields = [];
                     }
                 })
             } catch (err) {
                 console.error(err);
-                msg.channel.send(`Errore ${err}`);
+                msg.author.send(`Errore ${err}`);
             } finally {
                 return
             }
@@ -349,8 +376,9 @@ bot.on('message', (msg) => {
         let info = embed
             .setImage('https://i.pinimg.com/originals/65/ba/48/65ba488626025cff82f091336fbf94bb.gif')
             .setTitle('Attendere..')
+            .setColor('#F2D7EE')
 
-        msg.channel.send(info);
+        msg.author.send(info);
 
 
 
@@ -364,7 +392,7 @@ bot.on('message', (msg) => {
 
         sneaks.getMostPopular(function (err, products) {
             try {
-                msg.channel.send('Ecco a te le scarpe più popolari degli ultimi 3 mesi')
+                msg.author.send('Ecco a te le scarpe più popolari degli ultimi 3 mesi')
                 setTimeout(() => {
                     products.forEach(function (stonks) {
                         let d = stonks.releaseDate.substr(-2, 7);
@@ -373,7 +401,7 @@ bot.on('message', (msg) => {
                         if (y >= qstanno && m == qstmese || y >= qstanno && m == qstmese - 1 || y >= qstanno && m == qstmese - 2) {
                             let info = embed
                                 .setImage(`${stonks.thumbnail}`)
-                                .setColor('#f0f8ff')     //colore barra          
+                                .setColor('#F2D7EE')     //colore barra          
                                 .setTitle(`${stonks.shoeName}`)
                                 .addFields(
                                     { name: 'Prezzo retail:', value: `${(stonks.retailPrice === undefined) ? stonks.retailPrice = 'N/A' : stonks.retailPrice + '$'}` },
@@ -385,7 +413,7 @@ bot.on('message', (msg) => {
                                 )
                                 .setDescription(`Data Release: ${moment(stonks.releaseDate).format('LL')}`);
 
-                            msg.channel.send(info)
+                            msg.author.send(info)
                             info.fields = [];
 
                         }
@@ -393,7 +421,7 @@ bot.on('message', (msg) => {
                 }, 2000);
             } catch (err) {
                 console.error(err);
-                msg.channel.send(`Errore ${err}`);
+                msg.author.send(`Errore ${err}`);
             } finally {
                 return
             }

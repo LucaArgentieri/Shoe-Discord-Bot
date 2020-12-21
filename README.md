@@ -8,13 +8,13 @@ TO DO :
 To do easy :
 
 - Stile alla card \\ più avanti
-- cambiare colori card per ogni comando
-- Completamento lista !help \\ alla fine o aggiorna ogni tanto
 
 Doing:
 
 - Da fare il comando !resell (!resell #marca #modello #size) [INSERITO IN INFO]
 - Ricerca resell per numero [INSERITO IN INFO]
+- cambiare colori card per ogni comando [FATTO PER I COMANDI ATTUALI]
+- Completamento lista !help \\ alla fine o aggiorna ogni tanto [FATTO PER I COMANDI ATTUALI]
 
 Done:
 
