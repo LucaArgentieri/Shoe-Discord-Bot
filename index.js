@@ -156,7 +156,7 @@ bot.on('message', (msg) => {
                                 .addFields(
                                     { name: 'Prezzo retail:', value: `${(retail.retailPrice === undefined) ? retail.retailPrice = 'N/A' : retail.retailPrice + '$'}` }
                                 )
-                            msg.author.send(info)
+                            msg.channel.send(info)
                         });
 
                     } catch (err) {
