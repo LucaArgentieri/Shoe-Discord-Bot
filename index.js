@@ -3,7 +3,7 @@ var moment = require('moment');
 const SneaksAPI = require('sneaks-api');
 const sneaks = new SneaksAPI();
 require('events').EventEmitter.prototype._maxListeners = 100;
-const { Console, error } = require('console');
+// const { Console, error } = require('console');
 const Discord = require("discord.js");
 const bot = new Discord.Client();
 var fs = require('fs');
@@ -14,6 +14,13 @@ bot.login(process.env.DISCORD_KEY);
 bot.on('message', (message) => {
     console.log(`[${message.author.tag}]: ${message.content}`)
 });
+
+// bot.on('message', message => {
+//     if (message.author.dmChannel) {
+//         console.log('test')
+
+//     }
+// })
 
 // command check
 bot.on('message', (msg) => {
@@ -26,12 +33,11 @@ bot.on('message', (msg) => {
     }
 })
 
-
 //Help !help
 bot.on('message', (msg) => {
 
     if (msg.content.toLowerCase() == `${prefix}help`) {
-        if (msg.member.roles.cache.some(role => role.name === 'pantofolaio')) {
+        if (msg.author.dmChannel || msg.member.roles.cache.some(role => role.name === 'pantofolaio')) {
 
             const embed = new Discord.MessageEmbed()
 
@@ -63,7 +69,7 @@ bot.on('message', (msg) => {
 //add Raffle links   !addraffle + link
 bot.on('message', (msg) => {
     if (msg.content.substr(0, 10).toLowerCase() === `${prefix}addraffle`) {
-        if (msg.member.roles.cache.some(role => role.name === 'pantofolaio')) {
+        if (msg.author.dmChannel || msg.member.roles.cache.some(role => role.name === 'pantofolaio')) {
 
             var arraylist = fs.readFileSync('Links.txt', 'utf8');
             if (arraylist.length === 0) {
@@ -96,7 +102,7 @@ bot.on('message', (msg) => {
 // Pulisci lista raffle !rr
 bot.on('message', (msg) => {
     if (msg.content.toLowerCase() == `${prefix}rr`) {
-        if (msg.member.roles.cache.some(role => role.name === 'pantofolaio')) {
+        if (msg.author.dmChannel || msg.member.roles.cache.some(role => role.name === 'pantofolaio')) {
 
             let linkRicevuto = "";
             fs.writeFile('Links.txt', linkRicevuto, { flag: 'w' }, err => { });
@@ -114,7 +120,7 @@ bot.on('message', (msg) => {
 //Elenco lista Raffle !raffle
 bot.on('message', (msg) => {
     if (msg.content.toLowerCase() == `${prefix}raffle`) {
-        if (msg.member.roles.cache.some(role => role.name === 'pantofolaio')) {
+        if (msg.author.dmChannel || msg.member.roles.cache.some(role => role.name === 'pantofolaio')) {
 
             var arraylist = fs.readFileSync('Links.txt', 'utf8')
             console.log(arraylist)
@@ -134,7 +140,7 @@ bot.on('message', (msg) => {
 //prezzo retail !retail
 bot.on('message', (msg) => {
     if (msg.content.substr(0, 7).toLowerCase() === `${prefix}retail`) {
-        if (msg.member.roles.cache.some(role => role.name === 'pantofolaio')) {
+        if (msg.author.dmChannel || msg.member.roles.cache.some(role => role.name === 'pantofolaio')) {
 
             const x = msg.content.substr(7, msg.length);
             if (x.length <= 7) {
@@ -176,7 +182,7 @@ bot.on('message', (msg) => {
 //prezzo info !info
 bot.on('message', (msg) => {
     if (msg.content.substr(0, 5).toLowerCase() === `${prefix}info`) {
-        if (msg.member.roles.cache.some(role => role.name === 'pantofolaio')) {
+        if (msg.author.dmChannel || msg.member.roles.cache.some(role => role.name === 'pantofolaio')) {
 
             const x = msg.content.substr(5, msg.length);
             let filter = m => m.author.id === msg.author.id
@@ -362,7 +368,7 @@ bot.on('message', (msg) => {
 //prossime release !newrelease
 bot.on('message', (msg) => {
     if (msg.content.toLowerCase() === `${prefix}newrelease`) {
-        if (msg.member.roles.cache.some(role => role.name === 'pantofolaio')) {
+        if (msg.author.dmChannel || msg.member.roles.cache.some(role => role.name === 'pantofolaio')) {
 
             const embed = new Discord.MessageEmbed()
 
@@ -416,7 +422,7 @@ bot.on('message', (msg) => {
 //release del mese !dropmese (AGGIUNGERE AWAIT)
 bot.on('message', (msg) => {
     if (msg.content.toLowerCase() === `${prefix}dropmese`) {
-        if (msg.member.roles.cache.some(role => role.name === 'pantofolaio')) {
+        if (msg.author.dmChannel || msg.member.roles.cache.some(role => role.name === 'pantofolaio')) {
 
             var oggi = new Date()
             var qstmese = oggi.getMonth() + 1;
@@ -466,7 +472,7 @@ bot.on('message', (msg) => {
 //Scarpe stonks ultimi 3 mesi !stonks (AGGIUNGERE AWAIT, RISOLVERE PROBLEMA SCARPE UGUALI)
 bot.on('message', (msg) => {
     if (msg.content.toLowerCase() == `${prefix}stonks`) {
-        if (msg.member.roles.cache.some(role => role.name === 'pantofolaio')) {
+        if (msg.author.dmChannel || msg.member.roles.cache.some(role => role.name === 'pantofolaio')) {
 
             const embed = new Discord.MessageEmbed()
             let info = embed
@@ -528,4 +534,3 @@ bot.on('message', (msg) => {
     }
 
 });
-
