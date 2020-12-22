@@ -2,8 +2,7 @@
 
 TO DO :
 
-- Elenco scarpe più popolari che devono uscire \\ (non credo che sia possibile, non si possono elencare scarpe che non sono ancora uscite )
-- elenco dei nuovi annunci \\ stessa storia delle scarpe piu popolari
+- Elenco scarpe più popolari che devono uscire \\ [DA PROVARE COME STONKS MA UTILIZZANDO !nextdrop]
 
 To do easy :
 
@@ -11,6 +10,7 @@ To do easy :
 
 Doing:
 
+- elenco dei nuovi annunci \\ [FATTO PER IL MESE SUCCESSIVO]
 - Da fare il comando !resell (!resell #marca #modello #size) [INSERITO IN INFO]
 - Ricerca resell per numero [INSERITO IN INFO]
 - cambiare colori card per ogni comando [FATTO PER I COMANDI ATTUALI]

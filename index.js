@@ -46,14 +46,14 @@ bot.on('message', (msg) => {
                 .setColor('#E3655B')
                 .setTitle(`Lista comandi`)
                 .addFields(
-                    { name: '!presentati', value: `Non lo sappiamo nemmeno noi, provalo.` },
                     { name: '!addraffle', value: `Per aggiungere i link per le raffle.` },
                     { name: '!raffle', value: `Per elencare tutti i siti per iscriversi alle raffle in caso ti fossi perso qualche link.` },
                     { name: '!rr', value: `Per pulire la lista delle raffle.` },
                     { name: '!retail', value: `Per avere informazioni di una scarpa a retail.` },
                     { name: '!info', value: `Per avere informazioni dei prezzi di resell generici oppure in base al numero desiderato.` },
-                    { name: '!newrelease', value: `Per rimanere aggiornato sulle prossime uscite.` },
+                    { name: '!todayrelease', value: `Per rimanere aggiornato sulle uscite di oggi.` },
                     { name: '!dropmese', value: `Per rimanere aggiornato sulle uscite del mese corrente.` },
+                    { name: '!nextdrop', value: `Per rimanere aggiornato sulle uscite del prossimo mese.` },
                     { name: '!stonks', value: `Per vedere le scapre più popolari negli ultimi tre mesi.` }
                 )
 
@@ -335,7 +335,7 @@ bot.on('message', (msg) => {
                                             .setDescription(`Data Release: ${(resell.releaseDate === null) ? resell.releaseDate = 'Data non disponibile' : moment(resell.releaseDate).format('LL')}`)
 
 
-                                        msg.channel.send(info)
+                                        msg.author.send(info)
                                         info.fields = [];
                                     })
                                 })
@@ -365,9 +365,9 @@ bot.on('message', (msg) => {
 
 
 
-//prossime release !newrelease
+//prossime release !todayrelease
 bot.on('message', (msg) => {
-    if (msg.content.toLowerCase() === `${prefix}newrelease`) {
+    if (msg.content.toLowerCase() === `${prefix}todayrelease`) {
         if (msg.author.dmChannel || msg.member.roles.cache.some(role => role.name === 'pantofolaio')) {
 
             const embed = new Discord.MessageEmbed()
@@ -382,6 +382,7 @@ bot.on('message', (msg) => {
 
             var oggi = new Date()
             var giorno = oggi.getFullYear() + '-' + (oggi.getMonth() + 1) + '-' + ("0" + oggi.getDate()).slice(-2);
+            console.log(giorno)
 
             sneaks.getProducts(giorno, function (err, products) {
                 try {
@@ -469,6 +470,54 @@ bot.on('message', (msg) => {
     }
 });
 
+
+//release dei prossimi mesi
+bot.on('message', (msg) => {
+    if (msg.content.toLowerCase() === `${prefix}nextdrop`) {
+        if (msg.author.dmChannel || msg.member.roles.cache.some(role => role.name === 'pantofolaio')) {
+
+            var qstmese = moment().month() + 1;
+            var qstanno = moment().year();
+            var prossimoMese = (qstanno + 1) + '-' + (qstmese == 12 ? qstmese = '01' : qstmese + 1);
+
+
+            sneaks.getProducts(prossimoMese, function (err, products) {
+                try {
+                    const embed = new Discord.MessageEmbed()
+
+                    products.forEach(function (prossimo) {
+
+                        let info = embed
+                            .setImage(`${prossimo.thumbnail}`)
+                            .setColor('#FB6107')     //colore barra          
+                            .setTitle(`${prossimo.shoeName}`)
+                            .addFields(
+                                { name: 'Prezzo retail:', value: `${(prossimo.retailPrice === undefined) ? prossimo.retailPrice = 'N/A' : prossimo.retailPrice + '$'}` },
+                                { name: 'Prezzi di resell', value: 'del paio piu bassi avvenuti nei seguenti siti' },
+                                { name: 'StockX:', value: `${(prossimo.lowestResellPrice.stockX === undefined) ? prossimo.lowestResellPrice.stockX = 'N/A' : prossimo.lowestResellPrice.stockX + '$'}`, inline: true },
+                                { name: 'FlightClub:', value: `${(prossimo.lowestResellPrice.flightClub === undefined) ? prossimo.lowestResellPrice.flightClub = 'N/A' : prossimo.lowestResellPrice.flightClub + '$'}`, inline: true },
+                                { name: 'Goat:', value: `${(prossimo.lowestResellPrice.goat === undefined) ? prossimo.lowestResellPrice.goat = 'N/A' : prossimo.lowestResellPrice.goat + '$'}`, inline: true },
+                                { name: 'StadiumGoods:', value: `${(prossimo.lowestResellPrice.stadiumGoods === undefined) ? prossimo.lowestResellPrice.stadiumGoods = 'N/A' : prossimo.lowestResellPrice.stadiumGoods + '$'}`, inline: true },
+                            )
+                            .setDescription(`Data Release: ${moment(prossimo.releaseDate).format('LL')}`);
+
+                        msg.channel.send(info)
+                        info.fields = [];
+
+                    })
+                } catch (err) {
+                    console.error(err);
+                    msg.channel.send(`Errore ${err}`);
+                } finally {
+                    return
+                }
+            })
+        } else {
+            return msg.author.reply("Mi disp, ma non sei autorizzato.")
+        }
+    }
+});
+
 //Scarpe stonks ultimi 3 mesi !stonks (AGGIUNGERE AWAIT, RISOLVERE PROBLEMA SCARPE UGUALI)
 bot.on('message', (msg) => {
     if (msg.content.toLowerCase() == `${prefix}stonks`) {
@@ -493,15 +542,23 @@ bot.on('message', (msg) => {
 
 
             sneaks.getMostPopular(function (err, products) {
+
                 try {
+
                     msg.channel.send('Ecco a te le scarpe più popolari degli ultimi 3 mesi')
+
                     setTimeout(() => {
+
                         products.forEach(function (stonks) {
+
                             let d = stonks.releaseDate.substr(-2, 7);
                             let m = stonks.releaseDate.substr(-5, 2);
                             let y = stonks.releaseDate.substr(0, 4);
+
                             if (y >= qstanno && m == qstmese || y >= qstanno && m == qstmese - 1 || y >= qstanno && m == qstmese - 2) {
+
                                 let info = embed
+
                                     .setImage(`${stonks.thumbnail}`)
                                     .setColor('#F2D7EE')     //colore barra          
                                     .setTitle(`${stonks.shoeName}`)
