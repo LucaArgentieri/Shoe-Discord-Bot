@@ -14,5 +14,32 @@ A StockX API, FlightClub API, Goat API, and Stadium Goods API all in one.
 Sneaks API is a sneaker API built using Node.JS, Express, and Got. The Sneaks API allows users to get essential sneaker content such as images, product links and even prices from resell sites while also collecting data and storing it within a database.
 [Read more...](https://github.com/druv5319/Sneaks-API)
 
+## Commands
+#### Some names are temporary
+
+!addraffle
+To add links for raffles.
+
+!raffle
+To list all the sites to subscribe to raffles in case you missed some links.
+
+!rr
+To clean up the raffle list.
+
+!retail
+To get information about a shoe at retail.
+
+!info
+For information on generic resell prices or based on the desired number.
+
+!newrelease
+To stay updated on upcoming releases.
+
+!dropmese
+To stay updated on the releases of the current month.
+
+!stonks
+To see the most popular scapre in the last three months.
+
 ## Team
 All this was possible thanks to [Giann](https://github.com/giannandreanobu), [Dela](https://github.com/delaConsuela) and [Luca](https://github.com/LucaArgentieri)
