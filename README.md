@@ -1,4 +1,5 @@
 # Shoe Discord Bot
+⚠️ Work in progress, but we are fixing :)
 ## Idea
 We had in mind to build a bot to stay updated on the prices and upcoming releases of the sneakers.
 The biggest problem was finding the right API, but we managed to find a guy who did a huge job, put together: StockX FlightClub, Goat and Stadium Goods API, cool right?
@@ -17,12 +18,15 @@ Sneaks API is a sneaker API built using Node.JS, Express, and Got. The Sneaks AP
 ## Commands
 #### Some names are temporary
 
+⚠️ Not ready yet
 !addraffle
-To add links for raffles.
+To add links for raffles
 
+⚠️ Not ready yet
 !raffle
 To list all the sites to subscribe to raffles in case you missed some links.
 
+⚠️ Not ready yet
 !rr
 To clean up the raffle list.
 
@@ -35,9 +39,11 @@ For information on generic resell prices or based on the desired number.
 !newrelease
 To stay updated on upcoming releases.
 
+⚠️ Not ready yet
 !dropmese
 To stay updated on the releases of the current month.
 
+⚠️ Not ready yet
 !stonks
 To see the most popular scapre in the last three months.
 
