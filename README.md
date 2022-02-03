@@ -8,7 +8,8 @@ The biggest problem was finding the right API, but we managed to find a guy who 
 With this mega api we started studying discord.js and the project started.
 
 ## API 👟
-[Sneaks-API](https://github.com/druv5319/Sneaks-API)
+[Sneaks-API](https://github.com/druv5319/Sneaks-API) by [@druv5319](https://github.com/druv5319)
+
 
 A StockX API, FlightClub API, Goat API, and Stadium Goods API all in one.
 
