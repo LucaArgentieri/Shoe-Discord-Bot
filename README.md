@@ -51,7 +51,7 @@ npm run start
 !info
 For information on generic resell prices or based on the desired number.
 
-!retail
+!retail Yeezy(example)
 To get information about a shoe at retail.
 
 !nextDrop
