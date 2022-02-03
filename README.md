@@ -58,26 +58,12 @@ To get information about a shoe at retail.
 !nextDrop
 To stay updated on upcoming releases.
 
-
 ⚠️ Not ready yet
-!addraffle
-To add links for raffles
-
-⚠️ Not ready yet
-!raffle
-To list all the sites to subscribe to raffles in case you missed some links.
-
-⚠️ Not ready yet
-!rr
-To clean up the raffle list.
-
-
-⚠️ Not ready yet
-!dropmese
+!monthDrop
 To stay updated on the releases of the current month.
 
 ⚠️ Not ready yet
-!stonks
+!mostPopular
 To see the most popular scapre in the last three months.
 
 ## Team 😎
