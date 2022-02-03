@@ -58,11 +58,9 @@ To get information about a shoe at retail.
 !nextDrop
 To stay updated on upcoming releases.
 
-⚠️ Not ready yet
 !monthDrop
 To stay updated on the releases of the current month.
 
-⚠️ Not ready yet
 !mostPopular
 To see the most popular scapre in the last three months.
 
