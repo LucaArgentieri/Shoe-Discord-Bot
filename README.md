@@ -49,19 +49,19 @@ npm run start
 ## Commands 🤖
 #### Some names are temporary
 
-!info
+**!info**
 For information on generic resell prices or based on the desired number.
 
-!retail Yeezy(example)
+**!retail Yeezy**(example)
 To get information about a shoe at retail.
 
-!nextDrop
+**!nextDrop**
 To stay updated on upcoming releases.
 
-!monthDrop
+**!monthDrop**
 To stay updated on the releases of the current month.
 
-!mostPopular
+**!mostPopular**
 To see the most popular scapre in the last three months.
 
 #### TODO
