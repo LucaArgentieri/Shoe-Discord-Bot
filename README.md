@@ -42,6 +42,8 @@ npm run start
 ```
 
 #### Use commands in chat! 🎉
+##### You can use heroku or others for host your bot and have fun 
+
 
 ## Commands 🤖
 #### Some names are temporary
