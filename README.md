@@ -1,7 +1,5 @@
 # Shoe Discord Bot 🤖👟
 
-⚠️ Work in progress, but we are fixing :)
-
 ## Idea 💡
 
 We had in mind to build a bot to stay updated on the prices and upcoming releases of the sneakers.
