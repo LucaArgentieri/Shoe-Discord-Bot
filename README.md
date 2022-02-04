@@ -77,11 +77,6 @@ To get information about a shoe with number.
 **!mostPopular**
 To see the most popular scapre in the last three months.
 
-#### TODO
-
-- Today release
-- Info shoes number
-
 ## Team 😎
 
 All this was possible thanks to [Giann](https://github.com/giannandreanobu), [Dela](https://github.com/delaConsuela) and [Luca](https://github.com/LucaArgentieri)
