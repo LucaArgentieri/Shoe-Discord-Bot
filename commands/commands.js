@@ -18,9 +18,7 @@ const errorMsg = (msg, text) => {
 };
 
 const debug = () => {
-  // sneaks.getProducts("2022", 1, function (err, products) {
-  //   console.log(products);
-  // });
+  //Use me for debug
 };
 
 const help = () => {
@@ -28,31 +26,40 @@ const help = () => {
     if (checkPrefix(msg, "help")) {
       try {
         const embed = new Discord.MessageEmbed();
-        let info = embed
-          .setColor("#E3655B")
-          .setTitle(`Lista comandi`)
-          .addFields(
-            {
-              name: "$help",
-              value: `Per avere informazioni dei prezzi di resell generici oppure in base al numero desiderato.`,
-            },
-            {
-              name: "$nextDrop",
-              value: `Per rimanere aggiornato sulle uscite del prossimo mese.`,
-            },
-            {
-              name: "$mostPopular",
-              value: `Per vedere le scapre più popolari negli ultimi tre mesi.`,
-            },
-            {
-              name: "$monthDrop",
-              value: `This month drops.`,
-            }
-          );
+        let info = embed.setColor("#E3655B").setTitle(`Commands`).addFields(
+          {
+            name: "$help",
+            value: `For information on generic resell prices or based on the desired number.`,
+          },
+          {
+            name: "$retail + shoe name",
+            value: `To get information about a shoe at retail.`,
+          },
+          {
+            name: "$nextDrop",
+            value: `To stay updated on upcoming releases.`,
+          },
+          {
+            name: "$todayDrop",
+            value: `To stay updated on the releases of the day.`,
+          },
+          {
+            name: "$monthDrop",
+            value: `To stay updated on the releases of the current month.`,
+          },
+          {
+            name: "$infoShoesNumber + shoe name + shoes number",
+            value: `To get information about a shoe with number.`,
+          },
+          {
+            name: "$mostPopular",
+            value: `To see the most popular scapre in the last three months.`,
+          }
+        );
 
         msg.author.send(info);
       } catch (err) {
-        errorMsg(msg, "Ops, qualcosa è andato storto.");
+        errorMsg(msg, "Oops, somethings went wrong");
       }
     }
   });
@@ -71,7 +78,7 @@ const nextDrop = () => {
               .setTitle(`${product.shoeName}`)
               .addFields(
                 {
-                  name: "Prezzo retail:",
+                  name: "Retail:",
                   value: `${
                     product.retailPrice === undefined
                       ? (product.retailPrice = "N/A")
@@ -79,7 +86,7 @@ const nextDrop = () => {
                   }`,
                 },
                 {
-                  name: "Prezzi di resell",
+                  name: "Resell",
                   value: "del paio piu bassi avvenuti nei seguenti siti",
                 },
                 {
@@ -111,13 +118,13 @@ const nextDrop = () => {
                 }
               )
               .setDescription(
-                `Data Release: ${moment(product.releaseDate).format("LL")}`
+                `Release date: ${moment(product.releaseDate).format("LL")}`
               );
             msg.channel.send(info);
             info.fields = [];
           });
         } catch (err) {
-          errorMsg(msg, "Ops, qualcosa è andato storto.");
+          errorMsg(msg, "Oops, somethings went wrong");
         }
       });
     }
@@ -139,10 +146,10 @@ const retail = () => {
               .setColor("#E3655B")
               .setTitle(`${retail.shoeName}`)
               .setDescription(
-                `Data Release: ${moment(retail.releaseDate).format("LL")}`
+                `Release date: ${moment(retail.releaseDate).format("LL")}`
               )
               .addFields({
-                name: "Prezzo retail:",
+                name: "Retail:",
                 value: `${
                   retail.retailPrice === undefined
                     ? (retail.retailPrice = "N/A")
@@ -152,7 +159,7 @@ const retail = () => {
             msg.channel.send(info);
           });
         } catch (err) {
-          errorMsg(msg, "Ops, qualcosa è andato storto.");
+          errorMsg(msg, "Oops, somethings went wrong");
         }
       });
     }
@@ -172,7 +179,7 @@ const mostPopular = () => {
               .setTitle(`${product.shoeName}`)
               .addFields(
                 {
-                  name: "Prezzo retail:",
+                  name: "Retail:",
                   value: `${
                     product.retailPrice === undefined
                       ? (product.retailPrice = "N/A")
@@ -180,8 +187,8 @@ const mostPopular = () => {
                   }`,
                 },
                 {
-                  name: "Prezzi di resell",
-                  value: "del paio piu bassi avvenuti nei seguenti siti",
+                  name: "Resell",
+                  value: "lowest offer in these sites.",
                 },
                 {
                   name: "StockX:",
@@ -212,13 +219,13 @@ const mostPopular = () => {
                 }
               )
               .setDescription(
-                `Data Release: ${moment(product.releaseDate).format("LL")}`
+                `Release date: ${moment(product.releaseDate).format("LL")}`
               );
             msg.channel.send(info);
             info.fields = [];
           });
         } catch (err) {
-          errorMsg(msg, "Ops, qualcosa è andato storto.");
+          errorMsg(msg, "Oops, somethings went wrong");
         }
       });
     }
@@ -246,7 +253,7 @@ const monthDrop = () => {
               .setTitle(`${prossimo.shoeName}`)
               .addFields(
                 {
-                  name: "Prezzo retail:",
+                  name: "Retail:",
                   value: `${
                     prossimo.retailPrice === undefined
                       ? (prossimo.retailPrice = "N/A")
@@ -254,8 +261,8 @@ const monthDrop = () => {
                   }`,
                 },
                 {
-                  name: "Prezzi di resell",
-                  value: "del paio piu bassi avvenuti nei seguenti siti",
+                  name: "Resell",
+                  value: "lowest offer in these sites.",
                 },
                 {
                   name: "StockX:",
@@ -286,14 +293,14 @@ const monthDrop = () => {
                 }
               )
               .setDescription(
-                `Data Release: ${moment(prossimo.releaseDate).format("LL")}`
+                `Release date: ${moment(prossimo.releaseDate).format("LL")}`
               );
 
             msg.channel.send(info);
             info.fields = [];
           });
         } catch (err) {
-          errorMsg(msg, "Ops, qualcosa è andato storto.");
+          errorMsg(msg, "Oops, somethings went wrong");
         }
       });
     }
@@ -321,7 +328,7 @@ const todayDrop = () => {
               .setTitle(`${prossimo.shoeName}`)
               .addFields(
                 {
-                  name: "Prezzo retail:",
+                  name: "Retail:",
                   value: `${
                     prossimo.retailPrice === undefined
                       ? (prossimo.retailPrice = "N/A")
@@ -329,8 +336,8 @@ const todayDrop = () => {
                   }`,
                 },
                 {
-                  name: "Prezzi di resell",
-                  value: "del paio piu bassi avvenuti nei seguenti siti",
+                  name: "Resell",
+                  value: "lowest offer in these sites.",
                 },
                 {
                   name: "StockX:",
@@ -368,7 +375,7 @@ const todayDrop = () => {
             info.fields = [];
           });
         } catch (err) {
-          errorMsg(msg, "Ops, qualcosa è andato storto.");
+          errorMsg(msg, "Oops, somethings went wrong");
         }
       });
     }
@@ -387,60 +394,95 @@ const infoShoesNumber = () => {
 
     if (checkPrefix(msg, `infoShoesNumber ${shoes} ${number}`)) {
       //Number conversion
-      if (number == 35.5) {
-        number = 4;
-      } else if (number == 36) {
-        number = 4.5;
-      } else if (number == 36.5) {
-        number = 5;
-      } else if (number == 37) {
-        number = 5;
-      } else if (number == 37.5) {
-        number = 5.5;
-      } else if (number == 38) {
-        number = 6;
-      } else if (number == 38.5) {
-        number = 6;
-      } else if (number == 39) {
-        number = 6.5;
-      } else if (number == 40) {
-        number = 7;
-      } else if (number == 40.5) {
-        number = 7.5;
-      } else if (number == 41) {
-        number = 8;
-      } else if (number == 42) {
-        number = 8.5;
-      } else if (number == 42.5) {
-        number = 9;
-      } else if (number == 43) {
-        number = 9.5;
-      } else if (number == 44) {
-        number = 10;
-      } else if (number == 44.5) {
-        number = 10.5;
-      } else if (number == 45) {
-        number = 11;
-      } else if (number == 45.5) {
-        number = 11.5;
-      } else if (number == 46) {
-        number = 12;
-      } else if (number == 47) {
-        number = 12.5;
-      } else if (number == 47.5) {
-        number = 13;
-      } else if (number == 48) {
-        number = 13.5;
-      } else if (number == 48.5) {
-        number = 14;
-      } else if (number == 49 || number == 49.5) {
-        number = 15;
-      } else if (number == 50 || number == 50.5) {
-        number = 16;
-      } else if (number == 51 || number == 51.5) {
-        number = 17;
-      } else if (number == 52 || number == 52.5) {
-        number = 18;
+
+      switch (number) {
+        case number == 35.5:
+          number = 4;
+          break;
+        case number == 36:
+          number = 4.5;
+          break;
+        case number == 36.5:
+          number = 5;
+          break;
+        case number == 37:
+          number = 5;
+          break;
+        case number == 37.5:
+          number = 5.5;
+          break;
+        case number == 38:
+          number = 6;
+          break;
+        case number == 38.5:
+          number = 6;
+          break;
+        case number == 39:
+          number = 6.5;
+          break;
+        case number == 40:
+          number = 7;
+          break;
+        case number == 40.5:
+          number = 7.5;
+          break;
+        case number == 41:
+          number = 8;
+          break;
+        case number == 42:
+          number = 8.5;
+          break;
+        case number == 42.5:
+          number = 9;
+          break;
+        case number == 42.5:
+          number = 9;
+          break;
+        case number == 43:
+          number = 9.5;
+          break;
+        case number == 44:
+          number = 10;
+          break;
+        case number == 44.5:
+          number = 10.5;
+          break;
+        case number == 45:
+          number = 11;
+          break;
+        case number == 45.5:
+          number = 11.5;
+          break;
+        case number == 46:
+          number = 12;
+          break;
+        case number == 47:
+          number = 12.5;
+          break;
+        case number == 47.5:
+          number = 13;
+          break;
+        case number == 48:
+          number = 13.5;
+          break;
+        case number == 48.5:
+          number = 14;
+          break;
+        case number == 49 || number == 49.5:
+          number = 15;
+          break;
+        case number == 50 || number == 50.5:
+          number = 16;
+          break;
+        case number == 51 || number == 51.55:
+          number = 17;
+          break;
+        case number == 52 || number == 52.5:
+          number = 18;
+          break;
+
+        default:
+          break;
       }
 
       if (number >= 4 || number <= 18) {
@@ -452,12 +494,10 @@ const infoShoesNumber = () => {
                 let info = embed
                   .setImage(`${product.thumbnail}`)
                   .setColor("#CFD186") //colore barra
-                  .setTitle(
-                    `${product.shoeName}\nNumero selezionato: ${number}`
-                  )
+                  .setTitle(`${product.shoeName}\nSelected number: ${number}`)
                   .addFields(
                     {
-                      name: "Prezzo retail:",
+                      name: "Retail:",
                       value: `${
                         product.retailPrice === undefined
                           ? (product.retailPrice = "N/A")
@@ -465,8 +505,8 @@ const infoShoesNumber = () => {
                       }`,
                     },
                     {
-                      name: "Prezzi di resell",
-                      value: "del paio piu bassi avvenuti nei seguenti siti",
+                      name: "Resell",
+                      value: "lowest offer in these sites.",
                     },
                     {
                       name: "StockX:",
@@ -498,9 +538,9 @@ const infoShoesNumber = () => {
                     }
                   )
                   .setDescription(
-                    `Data Release: ${
+                    `Release date: ${
                       product.releaseDate === null
-                        ? (product.releaseDate = "Data non disponibile")
+                        ? (product.releaseDate = "Date not available.")
                         : moment(product.releaseDate).format("LL")
                     }`
                   );
@@ -515,7 +555,7 @@ const infoShoesNumber = () => {
         });
       } else {
         msg.channel.send(
-          `Reinserisci il comando inserendo un numero compreso tra 4 e 17`
+          `Re-enter the command by entering a number between 4 and 17`
         );
       }
     }

@@ -1,3 +1,5 @@
+// Code from the precedent release
+
 // //add Raffle links   !addraffle + link
 // bot.on("message", (msg) => {
 //   if (msg.content.substr(0, 10).toLowerCase() === `${prefix}addraffle`) {

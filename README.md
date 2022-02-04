@@ -54,25 +54,25 @@ npm run start
 
 #### Some names are temporary
 
-**!info**
+**$help**
 For information on generic resell prices or based on the desired number.
 
-**!retail Yeezy**(example)
+**$retail Yeezy**(example)
 To get information about a shoe at retail.
 
-**!nextDrop**
+**$nextDrop**
 To stay updated on upcoming releases.
 
-**!todayDrop**
+**$todayDrop**
 To stay updated on the releases of the day.
 
-**!monthDrop**
+**$monthDrop**
 To stay updated on the releases of the current month.
 
-**!infoShoesNumber Yeezy 11**(example)
+**$infoShoesNumber Yeezy 11**(example)
 To get information about a shoe with number.
 
-**!mostPopular**
+**$mostPopular**
 To see the most popular scapre in the last three months.
 
 ## Team 😎
