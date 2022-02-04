@@ -7,6 +7,8 @@ const shoeDiscordBot = () => {
   commands.retail();
   commands.mostPopular();
   commands.monthDrop();
+  commands.todayDrop();
+  commands.infoShoesNumber();
 };
 
 shoeDiscordBot();
