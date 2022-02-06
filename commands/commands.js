@@ -550,7 +550,7 @@ const infoShoesNumber = () => {
               });
             });
           } catch (err) {
-            console.error(err);
+            errorMsg(msg, "Oops, somethings went wrong");
           }
         });
       } else {
