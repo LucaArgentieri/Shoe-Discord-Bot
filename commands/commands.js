@@ -1,7 +1,6 @@
 require("dotenv").config();
 require("events").EventEmitter.prototype._maxListeners = 100;
 let moment = require("moment");
-let fs = require("fs");
 const SneaksAPI = require("sneaks-api");
 const sneaks = new SneaksAPI();
 const Discord = require("discord.js");
@@ -17,9 +16,6 @@ const errorMsg = (msg, text) => {
   msg.author.send(text);
 };
 
-const debug = () => {
-  //Use me for debug
-};
 
 const help = () => {
   bot.on("message", (msg) => {
@@ -79,41 +75,37 @@ const nextDrop = () => {
               .addFields(
                 {
                   name: "Retail:",
-                  value: `${
-                    product.retailPrice === undefined
-                      ? (product.retailPrice = "N/A")
-                      : product.retailPrice + "$"
-                  }`,
+                  value: `${product.retailPrice === undefined
+                    ? (product.retailPrice = "N/A")
+                    : product.retailPrice + "$"
+                    }`,
                 },
                 {
-                  name: "Resell",
-                  value: "del paio piu bassi avvenuti nei seguenti siti",
+                  name: "Resell:",
+                  value: "List of lowest resell prices."
                 },
                 {
                   name: "StockX:",
-                  value: `${
-                    product.lowestResellPrice.stockX === undefined
-                      ? (product.lowestResellPrice.stockX = "N/A")
-                      : product.lowestResellPrice.stockX + "$"
-                  }`,
+                  value: `${product.lowestResellPrice.stockX === undefined
+                    ? (product.lowestResellPrice.stockX = "N/A")
+                    : product.lowestResellPrice.stockX + "$"
+                    }`,
                   inline: true,
                 },
                 {
                   name: "FlightClub:",
-                  value: `${
-                    product.lowestResellPrice.flightClub === undefined
-                      ? (product.lowestResellPrice.flightClub = "N/A")
-                      : product.lowestResellPrice.flightClub + "$"
-                  }`,
+                  value: `${product.lowestResellPrice.flightClub === undefined
+                    ? (product.lowestResellPrice.flightClub = "N/A")
+                    : product.lowestResellPrice.flightClub + "$"
+                    }`,
                   inline: true,
                 },
                 {
                   name: "Goat:",
-                  value: `${
-                    product.lowestResellPrice.goat === undefined
-                      ? (product.lowestResellPrice.goat = "N/A")
-                      : product.lowestResellPrice.goat + "$"
-                  }`,
+                  value: `${product.lowestResellPrice.goat === undefined
+                    ? (product.lowestResellPrice.goat = "N/A")
+                    : product.lowestResellPrice.goat + "$"
+                    }`,
                   inline: true,
                 }
               )
@@ -150,12 +142,12 @@ const retail = () => {
               )
               .addFields({
                 name: "Retail:",
-                value: `${
-                  retail.retailPrice === undefined
-                    ? (retail.retailPrice = "N/A")
-                    : retail.retailPrice + "$"
-                }`,
-              });
+                value: `${retail.retailPrice === undefined
+                  ? (retail.retailPrice = "N/A")
+                  : retail.retailPrice + "$"
+                  }`,
+              },
+              );
             msg.channel.send(info);
           });
         } catch (err) {
@@ -180,41 +172,37 @@ const mostPopular = () => {
               .addFields(
                 {
                   name: "Retail:",
-                  value: `${
-                    product.retailPrice === undefined
-                      ? (product.retailPrice = "N/A")
-                      : product.retailPrice + "$"
-                  }`,
+                  value: `${product.retailPrice === undefined
+                    ? (product.retailPrice = "N/A")
+                    : product.retailPrice + "$"
+                    }`,
                 },
                 {
-                  name: "Resell",
-                  value: "lowest offer in these sites.",
+                  name: "Resell:",
+                  value: "List of lowest resell prices."
                 },
                 {
                   name: "StockX:",
-                  value: `${
-                    product.lowestResellPrice.stockX === undefined
-                      ? (product.lowestResellPrice.stockX = "N/A")
-                      : product.lowestResellPrice.stockX + "$"
-                  }`,
+                  value: `${product.lowestResellPrice.stockX === undefined
+                    ? (product.lowestResellPrice.stockX = "N/A")
+                    : product.lowestResellPrice.stockX + "$"
+                    }`,
                   inline: true,
                 },
                 {
                   name: "FlightClub:",
-                  value: `${
-                    product.lowestResellPrice.flightClub === undefined
-                      ? (product.lowestResellPrice.flightClub = "N/A")
-                      : product.lowestResellPrice.flightClub + "$"
-                  }`,
+                  value: `${product.lowestResellPrice.flightClub === undefined
+                    ? (product.lowestResellPrice.flightClub = "N/A")
+                    : product.lowestResellPrice.flightClub + "$"
+                    }`,
                   inline: true,
                 },
                 {
                   name: "Goat:",
-                  value: `${
-                    product.lowestResellPrice.goat === undefined
-                      ? (product.lowestResellPrice.goat = "N/A")
-                      : product.lowestResellPrice.goat + "$"
-                  }`,
+                  value: `${product.lowestResellPrice.goat === undefined
+                    ? (product.lowestResellPrice.goat = "N/A")
+                    : product.lowestResellPrice.goat + "$"
+                    }`,
                   inline: true,
                 }
               )
@@ -246,54 +234,50 @@ const monthDrop = () => {
         try {
           const embed = new Discord.MessageEmbed();
 
-          filteredProducts.forEach((prossimo) => {
+          filteredProducts.forEach((prod) => {
             let info = embed
-              .setImage(`${prossimo.thumbnail}`)
+              .setImage(`${prod.thumbnail}`)
               .setColor("#69306D") //colore barra
-              .setTitle(`${prossimo.shoeName}`)
+              .setTitle(`${prod.shoeName}`)
               .addFields(
                 {
                   name: "Retail:",
-                  value: `${
-                    prossimo.retailPrice === undefined
-                      ? (prossimo.retailPrice = "N/A")
-                      : prossimo.retailPrice + "$"
-                  }`,
+                  value: `${prod.retailPrice === undefined
+                    ? (prod.retailPrice = "N/A")
+                    : prod.retailPrice + "$"
+                    }`,
                 },
                 {
-                  name: "Resell",
-                  value: "lowest offer in these sites.",
+                  name: "Resell:",
+                  value: "List of lowest resell prices."
                 },
                 {
                   name: "StockX:",
-                  value: `${
-                    prossimo.lowestResellPrice.stockX === undefined
-                      ? (prossimo.lowestResellPrice.stockX = "N/A")
-                      : prossimo.lowestResellPrice.stockX + "$"
-                  }`,
+                  value: `${prod.lowestResellPrice.stockX === undefined
+                    ? (prod.lowestResellPrice.stockX = "N/A")
+                    : prod.lowestResellPrice.stockX + "$"
+                    }`,
                   inline: true,
                 },
                 {
                   name: "FlightClub:",
-                  value: `${
-                    prossimo.lowestResellPrice.flightClub === undefined
-                      ? (prossimo.lowestResellPrice.flightClub = "N/A")
-                      : prossimo.lowestResellPrice.flightClub + "$"
-                  }`,
+                  value: `${prod.lowestResellPrice.flightClub === undefined
+                    ? (prod.lowestResellPrice.flightClub = "N/A")
+                    : prod.lowestResellPrice.flightClub + "$"
+                    }`,
                   inline: true,
                 },
                 {
                   name: "Goat:",
-                  value: `${
-                    prossimo.lowestResellPrice.goat === undefined
-                      ? (prossimo.lowestResellPrice.goat = "N/A")
-                      : prossimo.lowestResellPrice.goat + "$"
-                  }`,
+                  value: `${prod.lowestResellPrice.goat === undefined
+                    ? (prod.lowestResellPrice.goat = "N/A")
+                    : prod.lowestResellPrice.goat + "$"
+                    }`,
                   inline: true,
                 }
               )
               .setDescription(
-                `Release date: ${moment(prossimo.releaseDate).format("LL")}`
+                `Release date: ${moment(prod.releaseDate).format("LL")}`
               );
 
             msg.channel.send(info);
@@ -329,41 +313,37 @@ const todayDrop = () => {
               .addFields(
                 {
                   name: "Retail:",
-                  value: `${
-                    prossimo.retailPrice === undefined
-                      ? (prossimo.retailPrice = "N/A")
-                      : prossimo.retailPrice + "$"
-                  }`,
+                  value: `${prossimo.retailPrice === undefined
+                    ? (prossimo.retailPrice = "N/A")
+                    : prossimo.retailPrice + "$"
+                    }`,
                 },
                 {
-                  name: "Resell",
-                  value: "lowest offer in these sites.",
+                  name: "Resell:",
+                  value: "List of lowest resell prices."
                 },
                 {
                   name: "StockX:",
-                  value: `${
-                    prossimo.lowestResellPrice.stockX === undefined
-                      ? (prossimo.lowestResellPrice.stockX = "N/A")
-                      : prossimo.lowestResellPrice.stockX + "$"
-                  }`,
+                  value: `${prossimo.lowestResellPrice.stockX === undefined
+                    ? (prossimo.lowestResellPrice.stockX = "N/A")
+                    : prossimo.lowestResellPrice.stockX + "$"
+                    }`,
                   inline: true,
                 },
                 {
                   name: "FlightClub:",
-                  value: `${
-                    prossimo.lowestResellPrice.flightClub === undefined
-                      ? (prossimo.lowestResellPrice.flightClub = "N/A")
-                      : prossimo.lowestResellPrice.flightClub + "$"
-                  }`,
+                  value: `${prossimo.lowestResellPrice.flightClub === undefined
+                    ? (prossimo.lowestResellPrice.flightClub = "N/A")
+                    : prossimo.lowestResellPrice.flightClub + "$"
+                    }`,
                   inline: true,
                 },
                 {
                   name: "Goat:",
-                  value: `${
-                    prossimo.lowestResellPrice.goat === undefined
-                      ? (prossimo.lowestResellPrice.goat = "N/A")
-                      : prossimo.lowestResellPrice.goat + "$"
-                  }`,
+                  value: `${prossimo.lowestResellPrice.goat === undefined
+                    ? (prossimo.lowestResellPrice.goat = "N/A")
+                    : prossimo.lowestResellPrice.goat + "$"
+                    }`,
                   inline: true,
                 }
               )
@@ -498,50 +478,65 @@ const infoShoesNumber = () => {
                   .addFields(
                     {
                       name: "Retail:",
-                      value: `${
-                        product.retailPrice === undefined
-                          ? (product.retailPrice = "N/A")
-                          : product.retailPrice + "$"
-                      }`,
+                      value: `${product.retailPrice === undefined
+                        ? (product.retailPrice = "N/A")
+                        : product.retailPrice + "$"
+                        }`,
                     },
                     {
-                      name: "Resell",
-                      value: "lowest offer in these sites.",
+                      name: "Resell:",
+                      value: "List of lowest resell prices."
                     },
                     {
                       name: "StockX:",
-                      value: `${
-                        product.resellPrices.stockX[number] === undefined
-                          ? (product.resellPrices.stockX = "N/A")
-                          : product.resellPrices.stockX[number] + "$"
-                      }`,
+                      value: `${product.lowestResellPrice.stockX === undefined ? "N/A" : product.lowestResellPrice.stockX + "$"}`,
+                      inline: true
+                    },
+                    {
+                      name: "FlightClub:",
+                      value: `${product.lowestResellPrice.flightClub === undefined ? "N/A" : product.lowestResellPrice.flightClub + "$"}`,
+                      inline: true
+                    },
+                    {
+                      name: "Goat:",
+                      value: `${product.lowestResellPrice.goat === undefined ? "N/A" : product.lowestResellPrice.goat + "$"}`,
+                      inline: true
+                    },
+                    {
+                      name: "Resell:",
+                      value: "List of latest resell prices."
+                    },
+                    {
+                      name: "StockX:",
+                      value: `${product.resellPrices.stockX[number] === undefined
+                        ? (product.resellPrices.stockX = "N/A")
+                        : product.resellPrices.stockX[number] + "$"
+                        }`,
                       inline: true,
                     },
                     {
                       name: "FlightClub:",
-                      value: `${
+                      value: `${product.resellPrices.flightClub === undefined ||
                         product.resellPrices.flightClub[number] === undefined
-                          ? (product.resellPrices.flightClub = "N/A")
-                          : product.resellPrices.flightClub[number] + "$"
-                      }`,
+                        ? (product.resellPrices.flightClub = "N/A")
+                        : product.resellPrices.flightClub[number] + "$"
+                        }`,
                       inline: true,
                     },
                     {
                       name: "Goat:",
-                      value: `${
-                        product.resellPrices.goat === undefined ||
+                      value: `${product.resellPrices.goat === undefined ||
                         product.resellPrices.goat[number] === undefined
-                          ? (product.resellPrices.goat = "N/A")
-                          : product.resellPrices.goat[number] + "$"
-                      }`,
+                        ? (product.resellPrices.goat = "N/A")
+                        : product.resellPrices.goat[number] + "$"
+                        }`,
                       inline: true,
                     }
                   )
                   .setDescription(
-                    `Release date: ${
-                      product.releaseDate === null
-                        ? (product.releaseDate = "Date not available.")
-                        : moment(product.releaseDate).format("LL")
+                    `Release date: ${product.releaseDate === null
+                      ? (product.releaseDate = "Date not available.")
+                      : moment(product.releaseDate).format("LL")
                     }`
                   );
                 msg.channel.send(info);
@@ -563,7 +558,6 @@ const infoShoesNumber = () => {
 };
 
 module.exports = {
-  debug,
   help,
   nextDrop,
   retail,
