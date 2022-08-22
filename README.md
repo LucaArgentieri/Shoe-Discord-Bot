@@ -18,9 +18,15 @@ Sneaks API is a sneaker API built using Node.JS, Express, and Got. The Sneaks AP
 
 ## Setup 📦
 
-#### First create an application and a bot from [here](https://discord.com/developers/applications) and in auth -> general check bot and Administrator, save the bot token in the bot page.
+#### First create an application from [here](https://discord.com/developers/applications)
+- Go in Bot and create a new bot
+- Go in 0Auth2/General
+- Select in AUTHORIZATION METHOD In-App Authorization
+- Tick bot in SCOPES
+- Tick administrator in BOT PERMISSIONS 
+- Copy CLIENT ID
 
-#### Invite the bot in your discord server
+#### Invite the bot in your discord server with this link template: https://discord.com/oauth2/authorize?client_id=YOUR_CLIENT_ID&scope=bot
 
 #### Clone the repo
 
@@ -34,7 +40,7 @@ git clone https://github.com/LucaArgentieri/Shoe-Discord-Bot.git
 npm i
 ```
 
-#### Create a .env file and put bot token
+#### Create a .env file and put bot token (you can copy it from dev portal -> bot -> token)
 
 ```
 BOT_TOKEN_KEY=DISCORD_BOT_TOKEN_HERE
