@@ -1,25 +1,19 @@
 require("dotenv").config();
 require("events").EventEmitter.prototype._maxListeners = 100;
-let moment = require("moment");
+
+const moment = require("moment");
 const SneaksAPI = require("sneaks-api");
 const sneaks = new SneaksAPI();
 const Discord = require("discord.js");
 const bot = new Discord.Client();
-const prefix = "$";
+const utils = require("../utils/utils");
 bot.login(process.env.BOT_TOKEN_KEY);
 
-const checkPrefix = (msg, command) => {
-  return msg.content === `${prefix}${command}`;
-};
-
-const errorMsg = (msg, text) => {
-  msg.author.send(text);
-};
-
+//Commands
 
 const help = () => {
   bot.on("message", (msg) => {
-    if (checkPrefix(msg, "help")) {
+    if (utils.checkPrefix(msg, "help")) {
       try {
         const embed = new Discord.MessageEmbed();
         let info = embed.setColor("#E3655B").setTitle(`Commands`).addFields(
@@ -55,7 +49,7 @@ const help = () => {
 
         msg.author.send(info);
       } catch (err) {
-        errorMsg(msg, "Oops, somethings went wrong");
+        utils.errorMsg(msg, "Oops, somethings went wrong");
       }
     }
   });
@@ -63,7 +57,7 @@ const help = () => {
 
 const nextDrop = () => {
   bot.on("message", (msg) => {
-    if (checkPrefix(msg, "nextDrop")) {
+    if (utils.checkPrefix(msg, "nextDrop")) {
       sneaks.getProducts(moment().year(), 10, (err, products) => {
         try {
           const embed = new Discord.MessageEmbed();
@@ -116,7 +110,7 @@ const nextDrop = () => {
             info.fields = [];
           });
         } catch (err) {
-          errorMsg(msg, "Oops, somethings went wrong");
+          utils.errorMsg(msg, "Oops, somethings went wrong");
         }
       });
     }
@@ -127,7 +121,7 @@ const retail = () => {
   bot.on("message", (msg) => {
     let name = msg.content.substring(8, msg.length);
 
-    if (checkPrefix(msg, `retail ${name}`)) {
+    if (utils.checkPrefix(msg, `retail ${name}`)) {
       sneaks.getProducts(name, 1, (err, products) => {
         try {
           const embed = new Discord.MessageEmbed();
@@ -151,7 +145,7 @@ const retail = () => {
             msg.channel.send(info);
           });
         } catch (err) {
-          errorMsg(msg, "Oops, somethings went wrong");
+          utils.errorMsg(msg, "Oops, somethings went wrong");
         }
       });
     }
@@ -160,7 +154,7 @@ const retail = () => {
 
 const mostPopular = () => {
   bot.on("message", (msg) => {
-    if (checkPrefix(msg, "mostPopular")) {
+    if (utils.checkPrefix(msg, "mostPopular")) {
       const embed = new Discord.MessageEmbed();
       sneaks.getMostPopular(10, (err, products) => {
         try {
@@ -213,7 +207,7 @@ const mostPopular = () => {
             info.fields = [];
           });
         } catch (err) {
-          errorMsg(msg, "Oops, somethings went wrong");
+          utils.errorMsg(msg, "Oops, somethings went wrong");
         }
       });
     }
@@ -222,7 +216,7 @@ const mostPopular = () => {
 
 const monthDrop = () => {
   bot.on("message", (msg) => {
-    if (checkPrefix(msg, "monthDrop")) {
+    if (utils.checkPrefix(msg, "monthDrop")) {
       let thisYearMonth = moment().format("YYYY-MM");
 
       sneaks.getProducts(thisYearMonth, 20, (err, products) => {
@@ -284,7 +278,7 @@ const monthDrop = () => {
             info.fields = [];
           });
         } catch (err) {
-          errorMsg(msg, "Oops, somethings went wrong");
+          utils.errorMsg(msg, "Oops, somethings went wrong");
         }
       });
     }
@@ -293,7 +287,7 @@ const monthDrop = () => {
 
 const todayDrop = () => {
   bot.on("message", (msg) => {
-    if (checkPrefix(msg, "todayDrop")) {
+    if (utils.checkPrefix(msg, "todayDrop")) {
       let thisYearMonth = moment().format("YYYY-MM-DD");
 
       sneaks.getProducts(thisYearMonth, 20, (err, products) => {
@@ -355,7 +349,7 @@ const todayDrop = () => {
             info.fields = [];
           });
         } catch (err) {
-          errorMsg(msg, "Oops, somethings went wrong");
+          utils.errorMsg(msg, "Oops, somethings went wrong");
         }
       });
     }
@@ -372,7 +366,7 @@ const infoShoesNumber = () => {
     //Separate Shoes
     let shoes = message.join(" ");
 
-    if (checkPrefix(msg, `infoShoesNumber ${shoes} ${number}`)) {
+    if (utils.checkPrefix(msg, `infoShoesNumber ${shoes} ${number}`)) {
       //Number conversion
 
       switch (number) {
@@ -545,7 +539,7 @@ const infoShoesNumber = () => {
               });
             });
           } catch (err) {
-            errorMsg(msg, "Oops, somethings went wrong");
+            utils.errorMsg(msg, "Oops, somethings went wrong");
           }
         });
       } else {
