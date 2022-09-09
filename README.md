@@ -1,4 +1,5 @@
 # Shoe Discord Bot 🤖👟
+![Cattura](https://user-images.githubusercontent.com/57524787/189426406-07847a3e-2e7a-4085-8f75-e299146eab81.PNG)
 
 ## Idea 💡
 
