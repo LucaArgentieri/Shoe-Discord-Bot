@@ -92,5 +92,6 @@ To get information about a shoe with number.
 To see the most popular scapre in the last three months.
 
 ---
+#### Thanks to all [Contributors](https://github.com/LucaArgentieri/Shoe-Discord-Bot/graphs/contributors) 👩‍💻👨‍💻
 
 #### If you like star ⭐️ and share!
