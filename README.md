@@ -27,6 +27,15 @@ Sneaks API is a sneaker API built using Node.JS, Express, and Got. The Sneaks AP
 - Tick administrator in BOT PERMISSIONS 
 - Copy CLIENT ID
 
+#### Now move in Bot tab and tick
+- Presence Intent
+- Server Members Intent
+- Message Content Intent
+
+![Bot message content intent](https://user-images.githubusercontent.com/57524787/190902625-7265b502-bfa4-43ac-a949-f59a3fec7369.PNG)
+
+
+
 #### Invite the bot in your discord server with this link template: https://discord.com/oauth2/authorize?client_id=YOUR_CLIENT_ID&scope=bot
 
 #### Clone the repo
