@@ -1,28 +1,18 @@
 {
-  "name": "discorddroptrack_bot",
-  "version": "1.0.0",
-  "main": "index.js",
+  "name": "shoe-discord-bot",
+  "module": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon ./index.js"
+    "dev": "bun --watch run index.js",
+    "deploy-commands": "bun run deploy-commands.js"
   },
-  "author": "",
-  "license": "ISC",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
   "dependencies": {
-    "discord.js": "^12.5.1",
-    "dotenv": "^8.2.0",
-    "moment": "^2.29.4",
-    "node-fetch": "^3.2.10",
-    "nodemon": "^2.0.19",
-    "sneaks-api": "^1.1.1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/LucaArgentieri/DiscordBot.git"
-  },
-  "bugs": {
-    "url": "https://github.com/LucaArgentieri/DiscordBot/issues"
-  },
-  "homepage": "https://github.com/LucaArgentieri/DiscordBot#readme",
-  "description": ""
+    "discord.js": "^14.14.1"
+  }
 }
